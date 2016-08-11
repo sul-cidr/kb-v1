@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<head>
+	<title>Kindred Britain Occupation Explorer</title>
+		<link type="text/css" rel="stylesheet" href="kb.css" />
+		<link href='https://fonts.googleapis.com/css?family=Sorts+Mill+Goudy:400,400italic' rel='stylesheet' type='text/css'" />
+		<script src="js/d3v3/d3.v3.min.js"></script>
+		<script type="text/javascript" src="occu_id.js"></script>
+		<script type="text/javascript" src="stats.js"></script>
+		<link rel="icon" 
+      type="image/png" 
+      href="favicon16.png" />
+</head>
+
+<body onload="statsStartup()">
+	<div style="width:600px;padding:20px;">
+	<div style="width:600px;height:40px;">
+	<div id="occTitle" style="width:600px; float:left; font-weight: 900; font-size: 16px;">
+	</div>
+	<div id="arcTitle" style="width:600px; text-align:right; font-weight: 600; font-size: 20px;">
+	</div>
+	</div>
+  	<div id="stats" style="height:200px;weight:600px;overflow: hidden;">
+	</div>
+	<div id="scrollSelect" style="width:600px;"><select onchange="selectChange(this)" style="text-transform: capitalize"></select>
+	</div>
+	<div id="tbDiv" style="width:600px; font-weight: 900; font-size: 20px;">
+	<div style="font-size: 18px;float:left; width:140px">Parents<input class="legendButton" type="button" style="padding: 10px 10px 8px 10px;height: auto;margin: 0 0 0 10px;font-size: 20px;" value="#&darr;" id="pSort" onclick="sortLi('parentDiv',this,'pSort');" /></div>
+	<div style="font-size: 18px;float:left; width:140px">Spouses<input class="legendButton" type="button" style="padding: 10px 10px 8px 10px;height: auto;margin: 0 0 0 10px;font-size: 20px;" value="#&darr;" id="spSort" onclick="sortLi('spouseDiv',this,'spSort');" /></div>
+	<div style="font-size: 18px;float:left; width:140px">Siblings<input class="legendButton" type="button" style="padding: 10px 10px 8px 10px;height: auto;margin: 0 0 0 10px;font-size: 20px;" value="#&darr;" id="sbSort" onclick="sortLi('siblingDiv',this,'sbSort');" /></div>
+	<div style="font-size: 18px;float:left; width:140px">Children<input class="legendButton" type="button" style="padding: 10px 10px 8px 10px;height: auto;margin: 0 0 0 10px;font-size: 20px;" value="#&darr;" id="cSort" onclick="sortLi('childDiv',this,'cSort');" /></div>		
+	</div>
+	<div style="width:600px; height:400px; overflow: auto;">
+	<div id="parentDiv" style="font-size: 18px;float:left; width:140px"><ol></ol></div>
+	<div id="spouseDiv" style="font-size: 18px;float:left; width:140px"><ol></ol></div>
+	<div id="siblingDiv" style="font-size: 18px;float:left; width:140px"><ol></ol></div>
+	<div id="childDiv" style="font-size: 18px;float:left; width:140px"><ol></ol></div>		
+	</div>
+	</div>
+</body>
+</html>

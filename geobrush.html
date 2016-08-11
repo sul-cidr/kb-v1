@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.background {
+  fill: #a4bac7;
+}
+
+.foreground {
+  fill: none;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+.graticule {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+.graticule :nth-child(2n) {
+  stroke-dasharray: 2,2;
+}
+
+.land {
+  fill: #d7c7ad;
+  stroke: #766951;
+}
+
+.boundary {
+  fill: none;
+  stroke: #a5967e;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var projection = d3.geo.aitoff();
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var graticule = d3.geo.graticule();
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+brush = d3.svg.brush()
+    .x(x)
+    .y(y)
+    .on("brush", brushed)
+    .extent([[100, 100], [200, 200]]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("defs").append("path")
+    .datum({type: "Sphere"})
+    .attr("id", "sphere")
+    .attr("d", path);
+
+svg.append("use")
+    .attr("class", "background")
+    .attr("xlink:href", "#sphere");
+
+svg.append("g")
+    .attr("class", "graticule")
+  .selectAll("path")
+    .data(graticule.lines)
+  .enter().append("path")
+    .attr("d", path);
+
+svg.append("use")
+    .attr("class", "foreground")
+    .attr("xlink:href", "#sphere");
+
+d3.json("/d/4090846/world-110m.json", function(error, world) {
+  svg.insert("path", ".graticule")
+      .datum(topojson.object(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+  svg.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+      
+      svg.append("g")
+    .attr("class", "brush")
+    .call(brush);
+});
+
+
+
+brushed();
+
+function brushed() {
+  var extent = brush.extent();
+  console.log(extent[0])
+  console.log(extent[1])
+}
+
+</script>

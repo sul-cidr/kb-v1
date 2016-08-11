@@ -1,0 +1,497 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>Kindred Britain</title>
+		<link rel="stylesheet" href="leaflet.css"></link>
+		<link type="text/css" rel="stylesheet" href="kb.css" />
+		<link href='https://fonts.googleapis.com/css?family=Sorts+Mill+Goudy:400,400italic' rel='stylesheet' type='text/css'" />
+		<script src="js/d3v3/d3.v3.min.js"></script>
+		<script src="js/queue.min.js"></script>
+		<script src="js/d3v3/d3.geo.projection.v0.min.js"></script>
+		<script src="js/d3v3/topojson.js"></script>
+		<script type="text/javascript" src="kb_graph.js"></script>
+		<script type="text/javascript" src="intro.js"></script>
+		<script type="text/javascript" src="kb_map.js"></script>
+		<script type="text/javascript" src="swim.js"></script>
+		<script type="text/javascript" src="settings_kb.js"></script>
+		<script type="text/javascript" src="occu_id.js"></script>
+		<script type="text/javascript" src="stories.js"></script>
+
+		<link rel="icon" 
+      type="image/png" 
+      href="favicon16.png" />
+<meta name="google-site-verification" content="rufx81yY-gMHXQ01IcYPfA1_CSCbOVNjedmlOPS67tU" />
+</head>
+<body onload="kbStartUp()">
+  	<div id="bioFloatContents1" class="bioContents">
+	</div>
+
+  	<div id="bioFloatContents2" class="bioContents">
+	</div>
+
+  	<div id="bioFloatContents3" class="bioContents shadowBio" style="width: 400px;">
+	<div id="isocTriRight" class="bio3Tri">
+	</div>
+	<div id="isocTriLeft" class="bio3Tri">
+	</div>
+	</div>
+
+	<div id="searchContents" class="topRightContents topContents" style="right: 137px;">
+	<div style="width:100%; border-color: #E5E5E5; border-width: thin; border-bottom-style: solid;padding-top: 20px;">
+	<input style="margin-left: 30px;" TYPE="button" id="indivSearchButton" NAME="button" class="searchButton active" Value="INDIVIDUALS" onClick='searchButtonClick("indivSearchButton")' />
+	<input TYPE="button" id="connectSearchButton" NAME="button" class="searchButton" Value="CONNECTIONS" onClick='searchButtonClick("connectSearchButton")' />
+	<input TYPE="button" id="groupSearchButton" NAME="button" class="searchButton" Value="GROUPS" onClick='searchButtonClick("groupSearchButton")' />
+	<input TYPE="button" id="recentSearchButton" NAME="button" class="searchButton" Value="RECENT" onClick='searchButtonClick("recentSearchButton")' />
+	</div>
+	<div id="connectPrepend" style="max-height: 250px; width:100%; margin:0px; padding:0px; overflow: hidden;">		
+	</div>
+	<div id="searchResultsDiv" style="width:100%; margin:0px; padding:0px; overflow: hidden;">
+  	</div>
+	<div id="searchBody" class="initial">
+<div style="width:100%; margin:5px; padding:0px;">
+
+<div style="padding: 0;" class="groupSearch"><span style="font-size: 13px;" class="sectionheading">Profession</span></div>
+<div style="width:100%; height: 60px;" class="groupSearch" id="groupHeader"></div>
+<div style="padding:0;" class="groupSearch"><span style="font-size: 13px;" class="sectionheading">Family</span></div>
+<div class="baseSearch" id="idSearchForm" style="padding:0;">
+<input style="width:300px;height:23px;padding:1px;border:1px #E5E5E5 solid;margin-right:10px;" TYPE="text" id="idInputBox" placeholder="name to search" onkeydown="return press( event,document.getElementById('idInputBox').value,'search','X','searchResultsDiv');"/>
+<input style="margin: 0;" class="legendButton" TYPE="button" NAME="button" Value="Search" id="runSearchButton" onClick="createSearchTable(document.getElementById('idInputBox').value,'search','X','searchResultsDiv')" /></div>
+<div class="groupSearch" style="padding:0 0 20px;">
+<input style="width:300px;height:23px;padding:1px;border:1px #E5E5E5 solid;margin-right:10px;" TYPE="text" id="familyInputBox" placeholder="family names to search" onkeydown="return press( event,document.getElementById('familyInputBox').value,'search','X','searchResultsDiv');"/>
+</div>
+<div style="padding: 20px 0 0;" class="groupSearch"><span style="font-size: 13px;" class="sectionheading">Place</span></div>
+<div class="groupSearch"><input TYPE="text" style="width:300px;height:23px;padding:1px;border:1px #E5E5E5 solid;" id="locationInputBox" placeholder="place names to search" onkeydown="return press( event,document.getElementById('familyInputBox').value,'search','X','searchResultsDiv');"/></div>
+<div style="padding: 35px 0;" class="baseSearch"><span style="font-size: 13px;" class="sectionheading">Time</span></div>
+		</div>
+
+  	<div class="baseSearch" style="width:100%; height: 100px;">
+		<svg id="searchBrushSVG" style="width:575px;margin:-30px;">
+			
+		</svg>
+	</div>
+	<div class="groupSearch" style="padding:0 0 20px;">
+<input style="position: relative;top: 7px; margin: 0 0 0 6px;" class="legendButton" TYPE="button" NAME="button" Value="Search" id="runSearchButton" onClick="createSearchTable(document.getElementById('familyInputBox').value,'search','X','searchResultsDiv')" />
+	</div>
+
+	<div class="recentSearch" style="display: none;">
+		<ol id="pastList" style="text-align: left;">
+			
+		</ol>
+	</div>
+	</div>
+  	<div class="topButton" onclick="searchButtonClick('indivSearchButton');toggleDisplay('searchContents',document.getElementById('searchContents'))" style="height:30px; width:100%; border-style: solid none none none; border-width: thin; border-color: #E8E7EF; text-align: center; padding: 10px 0 0;">
+	 &uarr;
+	</div>
+	</div>
+	<div id="shareContents" class="topRightContents topContents" style="right: 81px;width:400px;">
+	<div style="padding: 20px;">
+	<div><div id="fb-root"></div><div class="fb-like" style="margin-right:25px;" data-href="http://kindred.stanford.edu" data-layout="button_count" data-send="false" data-width="450" data-show-faces="false" data-font="verdana"></div>
+	<div id="twsh_button" style="display:inline;float:left;"><a href="http://twitter.com/share" class="twitter-share-button" text="Kindred Britain" data-via="KindredBritain" data-hashtags="KindredBritain">Tweet</a></div>
+	<div class="g-plusone" data-size="medium"></div></div>
+	<div style="margin: 20px 0;"><a href="http://twitter.com/KindredBritain" style="margin-left:10px;" class="twitter-follow-button" data-show-count="false">Follow @KindredBritain</a></div>
+	<div>Direct link to this view:</div>
+	<div style="height:40px;"><input type="url" onClick="this.select();" id="linkUrlBox" value="http://kindred.stanford.edu" readonly /></div>
+	</div>
+	<div class="topButton" onclick="toggleDisplay('shareContents',document.getElementById('shareContents'))" style="height:30px; width:100%; border-style: solid none none none; border-width: thin; border-color: #E8E7EF; text-align: center; padding: 10px 0 0;">
+	 &uarr;
+	</div>
+	</div>
+	<div id="helpContents" class="topRightContents topContents" style="right: 25px;">
+	<div style="padding:20px;" id="helpItems">
+	<p><span class="thicker">KINDRED BRITAIN</span></p>
+	<p style="padding-top:20px">Version 1.0</p>
+	<p style="padding-top:20px; padding-left:20px;">&lsquo;Only connect...&rsquo; &mdash; <span class="emphasize">E. M. Forster</span></p>
+	<p style="padding-top:10px; padding-left:20px;">&lsquo;Family connexions are part of the poetry of history&rsquo; &mdash; <span class="emphasize">Noel Annan</span></p>
+	<p style="padding-top:20px;color:#808080;">ESSAYS</p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=originating" target="_blank">Originating Kindred Britain</a> <span class="emphasize">by Nicholas Jenkins</span></p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=developing" target="_blank">Developing Kindred Britain</a> <span class="emphasize">by Elijah Meeks and Karl Grossner</span></p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=designing" target="_blank">Designing Kindred Britain</a> <span class="emphasize">by Scott Murray</span></p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=statistics" target="_blank">Kindred Britain: Statistics</a> <span class="emphasize">by Elijah Meeks</span></p>
+	<p style="padding-top:20px;color:#808080;">GENERAL INFORMATION</p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=userGuide" target="_blank">User's Guide</a> <span class="emphasize">by Hannah Abalos and Nicholas Jenkins</span></p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=faq" target="_blank">FAQs</a></p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=glossary" target="_blank">Glossary</a> <span class="emphasize">by Hannah Abalos and Emma Townley-Smith</span></p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=acknowledgements" target="_blank">Acknowledgements</a></p>
+	<p><a href="http://kindred.stanford.edu/notes.html?section=termsOfUse" target="_blank">Terms of Use</a></p>
+	<p style="padding-top:20px">If you notice a problem with the site or have a question or copyright concern, please contact us at <a href="mailto:kindredbritain@stanford.edu">kindredbritain@stanford.edu</a></p>
+	<p style="padding-top:20px"><span class="emphasize">Kindred Britain</span> © 2013 <a href="mailto:njenkins@stanford.edu">Nicholas Jenkins</a> All rights reserved</p>
+	</div>
+	<div class="topButton" onclick="toggleDisplay('helpContents',document.getElementById('helpContents'))" style="height:30px; width:100%; border-style: solid none none none; border-width: thin; border-color: #E8E7EF; text-align: center; padding: 10px 0 0;">
+	 &uarr;
+	</div>
+	</div>
+	
+	<div id="peopleContents" class="middleContents topContents">
+	<div style="padding:20px;">A selection of some of the subjects - famous families, numinous siblings and historic individuals - in <span class="emphasize">Kindred Britain</span>.</div>
+	<div class="initial">
+	<div class="innerMiddle">
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Most viewed</li>
+	<li><a onclick="restartNetwork('I27325')">William Shakespeare</a></li>
+	<li><a onclick="restartNetwork('I5457')">George Washington</a></li>
+	<li><a onclick="restartNetwork('I7674')">Virginia Woolf</a></li>
+	<li><a onclick="restartNetwork('I7462')">Charles Darwin</a></li>
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Professions</li>
+	<li><a onclick="changeTitle('Prime Ministers');viz01('\'I15051\',\'I1339\',\'I9975\',\'I1668\',\'I9982\',\'I1942\',\'I1949\',\'I1945\',\'i15054\',\'I1735\',\'I15713\',\'I1816\',\'I1952\',\'I1671\',\'I9190\',\'I12298\',\'I15876\',\'I15719\',\'I1943\',\'I12395\',\'I6163\',\'I12433\',\'I16880\',\'I2007\',\'I15897\',\'I16995\',\'I12438\',\'I16989\',\'I4369\',\'I17428\',\'I12922\',\'I10533\',\'I17403\',\'I10034\',\'I10008\',\'I10536\',\'I9152\',\'I18590\',\'I19857\',\'I2135\',\'I6331\',\'I9705\',\'I9048\'','list',5)">Prime Ministers</a></li>
+	<li><a onclick="changeTitle('Novelists');viz01('\'I21391\',\'I25664\',\'I1596\',\'I4980\',\'I7619\',\'I28528\',\'I26931\',\'I6481\',\'I8297\',\'I13775\',\'I1580\',\'I12001\',\'I27934\',\'I4994\',\'I14706\',\'I9118\',\'I7733\',\'I12220\',\'I7649\',\'I12144\',\'I6504\',\'I6482\',\'I3509\',\'I17428\',\'I26437\',\'I19125\',\'I28549\',\'I9342\',\'I14952\',\'I14707\',\'I29706\',\'I13381\',\'I23178\',\'I8323\',\'I6509\',\'I12805\',\'I29672\',\'I16208\',\'I18311\',\'I10769\',\'I6481\',\'I9315\',\'I16498\',\'I17955\',\'I16\',\'I8\',\'I19950\',\'I29307\',\'I9394\',\'I29587\',\'I6080\',\'I23744\',\'I19970\',\'I6559\',\'I6491\',\'I4983\',\'I19672\',\'I13175\',\'I14599\',\'I23883\',\'I23880\',\'I23175\',\'I13035\',\'I10407\',\'I13636\',\'I13643\',\'I1744\',\'I22651\',\'I1580\',\'I14901\',\'I10998\',\'I8184\',\'I15832\',\'I22760\',\'I10306\',\'I13078\',\'I22758\',\'I15685\',\'I10088\',\'I8068\',\'I11807\',\'I24607\',\'I7674\',\'I22851\',\'I15410\',\'I15754\',\'I23715\',\'I22299\',\'I23148\',\'I15802\',\'I22607\',\'I17121\',\'I26304\',\'I19088\',\'I1883\',\'I21063\',\'I26034\',\'I26039\',\'I12432\',\'I16289\',\'I28984\'','list',5)">Novelists</a></li>
+	<li><a onclick="changeTitle('Poets');viz01('\'I2595\',\'I23464\',\'I8284\',\'I26992\',\'I4100\',\'I11097\',\'I3427\',\'I28470\',\'I25472\',\'I11042\',\'I12744\',\'I5906\',\'I29724\',\'I28003\',\'I6072\',\'I30304\',\'I29036\',\'I14269\',\'I5273\',\'I23859\',\'I24015\',\'I10834\',\'I9510\',\'I7624\',\'I10701\',\'I6616\',\'I26306\',\'I27716\',\'I29977\',\'I30169\',\'I5895\',\'I29587\',\'I13040\',\'I5\',\'I21303\',\'I3530\',\'I14193\',\'I5247\',\'I6598\',\'I9669\',\'I9260\',\'I13810\',\'I9436\',\'I13454\',\'I6545\',\'I28055\',\'I22018\',\'I4852\',\'I8857\',\'I1596\',\'I4499\',\'I22603\',\'I22604\',\'I16483\',\'I9788\',\'I1903\',\'I11097\',\'I2248\',\'I595\',\'I13636\',\'I22499\',\'I2367\',\'I7936\',\'I14563\',\'I17244\',\'I7923\',\'I9371\',\'I595\',\'I4387\',\'I13041\',\'I19924\',\'I10374\',\'I28055\',\'I6598\',\'I6545\',\'I10834\',\'I5273\',\'I25865\',\'I22603\',\'I14563\',\'I27325\',\'I24214\',\'I5821\',\'I23408\',\'I26731\',\'I4100\',\'I4424\',\'I9997\',\'I20374\',\'I10864\',\'I27278\',\'I9287\',\'I4424\',\'I9260\',\'I13040\',\'I29724\',\'I25476\',\'I9371\',\'I9997\',\'I24214\'','list',5)">Poets</a></li>
+	<li><a onclick="changeTitle('Actors/Actresses');viz01('\'I10074\',\'I9031\',\'I10103\',\'I16815\',\'I9604\',\'I9599\',\'I9608\',\'I11751\',\'I13754\',\'I15361\',\'I15632\',\'I15645\',\'I19188\',\'I23697\',\'I24377\',\'I27868\',\'I27884\',\'I29102\',\'I29101\',\'I29110\',\'I29106\',\'I27028\',\'I24082\',\'I29345\',\'I21125\',\'I19364\',\'I29113\',\'I29714\',\'I23691\',\'I23687\',\'I29157\',\'I29153\',\'I29117\',\'I29151\',\'I16700\',\'I22652\',\'I23710\',\'I23714\',\'I9596\',\'I6490\',\'I6480\',\'I23702\',\'I23698\',\'I15636\',\'I15638\',\'I29163\',\'I24076\',\'I11066\',\'I29145\',\'I29707\',\'I13077\',\'I15637\',\'I12702\',\'I24627\',\'I24084\',\'I24083\',\'I23177\',\'I25241\',\'I29158\',\'I19840\',\'I29146\',\'I29138\',\'I24564\',\'I25237\',\'I23692\',\'I3845\',\'I29341\',\'I10400\',\'I24095\',\'I24081\',\'I24098\',\'I14836\',\'I28566\',\'I13225\',\'I23856\',\'I16949\',\'I28791\',\'I21046\',\'I14823\',\'I24386\',\'I16066\',\'I24435\',\'I16814\',\'I10183\',\'I22826\',\'I7265\',\'I7\',\'I9839\',\'I3916\',\'I24405\',\'I24439\',\'I13045\',\'I10666\',\'I20057\',\'I23089\',\'I24030\',\'I16535\',\'I23703\',\'I15639\',\'I29118\',\'I22678\',\'I1341\',\'I19191\',\'I29673\',\'I2004\',\'I3467\',\'I9895\',\'I14704\',\'I19870\',\'I25939\'','list',5)">Actors/Actresses</a></li>
+	<li><a onclick="changeTitle('Explorers and Mountaineers');viz01('\'I28576\',\'I4723\',\'I26853\',\'I21210\',\'I11477\',\'I14015\',\'I10330\',\'I3756\',\'I7316\',\'I3640\',\'I24503\',\'I7854\',\'I29648\',\'I12068\',\'I28823\',\'I26751\',\'I16110\',\'I18459\',\'I6052\',\'I23128\',\'I3757\',\'I25981\',\'I20560\',\'I20562\',\'I18641\',\'I20601\',\'I12763\',\'I18621\',\'I9821\',\'I13144\',\'I13181\',\'I16101\',\'I5243\',\'I25983\',\'I29187\',\'I25977\',\'I18250\',\'I20956\',\'I21901\',\'I24318\',\'I25914\',\'I29023\',\'I8227\'','list',5)">Explorers and Mountaineers</a></li>
+	<li><a onclick="changeTitle('Musicians and Singers');viz01('\'I23813\',\'I25821\',\'I6541\',\'I10867\',\'I10292\',\'I25823\',\'I22601\',\'I28881\',\'I15697\',\'I29248\',\'I14612\',\'I24421\',\'I17898\',\'I19560\',\'I15518\',\'I15516\',\'I29050\',\'I28669\',\'I10291\',\'I4177\',\'I6124\',\'I30221\',\'I30220\',\'I9621\',\'I24984\',\'I24988\',\'I24975\',\'I24990\',\'I13052\',\'I29320\',\'I27800\',\'I3543\',\'I1511\',\'I1854\',\'I25017\',\'I19137\',\'I25028\',\'I22827\',\'I22301\',\'I7414\',\'I24006\',\'I15595\',\'I7651\',\'I25819\',\'I26695\',\'I29232\',\'I12474\',\'I15472\',\'I28895\',\'I28564\',\'I24090\',\'I25001\',\'I11902\',\'I14923\',\'I28901\',\'I20369\',\'I4185\',\'I17365\',\'I10564\',\'I26241\',\'I28686\',\'I28691\',\'I9658\',\'I14702\',\'I6276\',\'I6281\',\'I24761\',\'I15473\',\'I26818\',\'I16962\',\'I24077\',\'I13314\',\'I23851\',\'I25001\',\'I25004\',\'I6123\',\'I23690\',\'I28985\',\'I6488\',\'I19951\',\'I24589\',\'I22308\',\'I21289\',\'I12269\',\'I24411\',\'I28852\',\'I28670\',\'I26817\',\'I8434\',\'I26688\',\'I26695\'','list',5)">Musicians and Singers</a></li>
+	<li><a onclick="changeTitle('Painters');viz01('\'I23911\',\'I25536\',\'I10694\',\'I10941\',\'I30235\',\'I20975\',\'I20005\',\'I15628\',\'I14576\',\'I28967\',\'I15627\',\'I19095\',\'I9120\',\'I13050\',\'I10372\',\'I9800\',\'I19653\',\'I26013\',\'I20056\',\'I7728\',\'I20063\',\'I27422\',\'I22599\',\'I7672\',\'I11903\',\'I4045\',\'I15633\',\'I24476\',\'I13214\',\'I28914\',\'I9829\',\'I26270\',\'I22600\',\'I29477\',\'I10094\',\'I14696\',\'I9488\',\'I75\',\'I20506\',\'I12445\',\'I22644\',\'I1588\',\'I15384\',\'I127574\',\'I10863\',\'I27977\',\'I15622\',\'I19941\',\'I15628\',\'I6512\',\'I25848\',\'I28327\'','list',5)">Painters</a></li>
+	<li><a onclick="changeTitle('Naval Officers');viz01('\'I591\',\'I11273\',\'I29955\',\'I8812\',\'I1769\',\'I28285\',\'I11426\',\'I18426\',\'I20891\',\'I17875\',\'I25328\',\'I18428\',\'I18153\',\'I21667\',\'I1874\',\'I26062\',\'I21626\',\'I29670\',\'I4843\',\'I25914\',\'I21563\',\'I23538\',\'I28950\',\'I23632\',\'I22291\',\'I19033\',\'I13712\',\'I1889\',\'I22033\',\'I23428\',\'I23492\',\'I21707\',\'I21318\',\'I18949\',\'I10335\',\'I18948\',\'I17197\',\'I21343\',\'I13933\',\'I22176\',\'I21847\',\'I21325\',\'I18450\',\'I21321\',\'I21558\',\'I22077\',\'I21882\',\'I14771\',\'I7096\',\'I21378\',\'I10330\',\'I21960\',\'I6052\',\'I7610\',\'I16978\',\'I18841\',\'I24881\',\'I21393\',\'I16957\',\'I26677\',\'I29023\',\'I20775\',\'I21539\',\'I24503\',\'I16968\',\'I17512\',\'I25918\',\'I25981\',\'I26715\',\'I22012\',\'I19294\',\'I22031\',\'I15706\',\'I26761\',\'I29535\'','list',5)">Naval Officers</a></li>
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Families</li>
+	<li><a onclick="restartNetwork('I28910')">Burney</a></li>
+	<li><a onclick="restartNetwork('I21391')">Austen</a></li>
+	<li><a onclick="restartNetwork('I7462')">Darwin</a></li>
+	<li><a onclick="restartNetwork('I12144')">Dickens</a></li>
+	<li><a onclick="restartNetwork('I29012')">Wilde</a></li>
+	<li><a onclick="restartNetwork('I28692')">Wittgenstein</a></li>
+	<li><a onclick="restartNetwork('I5')">Auden</a></li>
+	</ol>
+	</div>
+	</div>
+	<div class="innerMiddle">
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Sisters</li>
+	<li><a onclick="changeTitle('Waldegrave Sisters');viz01('\'I1922\',\'I1921\',\'I12006\',\'I12011\',\'I15475\',\'I15476\',\'I12008\',\'I12007\',\'I20521\',\'I24854\',\'I1955\',\'I1957\',\'I21523\',\'I25751\',\'I1964\',\'I16179\'','list',5)">Waldegrave</a></li>
+	<li><a onclick="changeTitle('Lennox Sisters');viz01('\'I7046\',\'I7047\',\'I12235\',\'I12231\',\'I12198\',\'I12236\',\'I18488\',\'I13117\',\'I13118\',\'I18476\',\'I18470\',\'I18474\',\'I18472\',\'I13120\',\'I18464\',\'I18451\',\'I18468\',\'I18449\',\'I13119\',\'I18448\',\'I18447\',\'I18477\',\'I18478\',\'I18496\',\'I18503\',\'I18486\',\'I18492\',\'I18499\',\'I18689\',\'I18504\'','list',5)">Lennox</a></li>
+	<li><a onclick="changeTitle('Sheridan Sisters');viz01('\'I6480\',\'I6481\',\'I6478\',\'I6477\',\'I6399\',\'I6479\',\'I6482\',\'I6485\',\'I26383\',\'I26385\',\'I26384\',\'I6486\',\'I6483\',\'I6484\',\'I21282\',\'I21052\',\'I23359\'','list',5)">Sheridan</a></li>
+	<li><a onclick="changeTitle('Pattle Sisters');viz01('\'I7678\',\'I7679\',\'I15278\',\'I15320\',\'I15279\',\'I7677\',\'I15272\',\'I22422\',\'I22427\',\'I22424\',\'I22418\',\'I22421\',\'I22414\',\'I7729\',\'I7730\',\'I15658\',\'I10040\',\'I7665\',\'I7664\',\'I14429\',\'I7663\',\'I7666\',\'I15281\',\'I15321\',\'I15284\',\'I15285\',\'I16547\',\'I23832\',\'I15322\',\'I15282\',\'I15283\',\'I15548\',\'I15549\',\'I15551\'','list',5)">Pattle</a></li>
+	<li><a onclick="changeTitle('Macdonald Sisters');viz01('\'I19919\',\'I19920\',\'I19922\',\'I19923\',\'I19924\',\'I19925\',\'I19931\',\'I19935\',\'I19940\',\'I19941\',\'I19945\',\'I19947\',\'I19946\',\'I20001\',\'I20005\',\'I20034\',\'I20035\',\'I19871\',\'I19865\',\'I19857\',\'I19938\'','list',5)">Macdonald</a></li>
+	<li><a onclick="changeTitle('Potter Sisters');viz01('\'I12515\',\'I12516\',\'I12517\',\'I12518\',\'I12519\',\'I12529\',\'I12520\',\'I12530\',\'I12522\',\'I12528\',\'I12780\',\'I12767\',\'I11900\',\'I12705\',\'I12764\',\'I12762\',\'I12523\',\'I12533\',\'I12524\',\'I12544\',\'I12811\',\'I12847\',\'I16843\',\'I16844\',\'I12812\',\'I12525\',\'I12553\',\'I16703\',\'I12768\',\'I16709\',\'I16710\',\'I16712\',\'I16713\',\'I16715\',\'I12526\',\'I12555\',\'I12527\',\'I12556\',\'I12557\',\'I12689\'','list',5)">Potter</a></li>
+	<li><a onclick="changeTitle('Stephen Sisters');viz01('\'I7671\',\'I7666\',\'I7680\',\'I7672\',\'I7732\',\'I15384\',\'I15385\',\'I9436\',\'I9437\',\'I7674\',\'I7676\',\'I15252\',\'I7669\',\'I7829\'','list',5)">Stephen</a></li>
+	<li><a onclick="changeTitle('Gore-Booth Sisters');viz01('\'I7316\',\'I7317\',\'I7319\',\'I7320\',\'I7321\',\'I7323\',\'I7346\',\'I7324\',\'I7331\'','list',5)">Gore-Booth</a></li>
+	<li><a onclick="changeTitle('Guinness Sisters');viz01('\'I6345\',\'I6336\',\'I6337\',\'I6346\',\'I6349\',\'I6338\',\'II6345\',\'I6511\',\'I6382\',\'I6351\',\'I6352\',\'I6347\',\'I6353\',\'I6354\',\'I6354\'','list',5)">Guinness</a></li>
+	</ol>
+	</div>
+		<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">First and last</li>
+	<li><a onclick="restartNetwork('I2278')">Last Plantagenet monarch and last English king to die in battle: 1485, Richard III</a></li>
+	<li><a onclick="restartNetwork('I25852')">Last peer to be executed: 1760, Laurence Shirley, 4th Earl Ferrers</a></li>
+	<li><a onclick="restartNetwork('I5457')">1st President of the United States: 1789, George Washington</a></li>
+	<li><a onclick="restartNetwork('I24405')">1st woman to write a libretto for an opera: 1794, Ann Hatton</a></li>
+	<li><a onclick="restartNetwork('I13283')">1st Quaker to take a seat in Parliament: 1832, Joseph Pease</a></li>
+	<li><a onclick="restartNetwork('I27751')">1st Jew to take a seat in Parliament: 1858, Lionel Nathan Rothschild</a></li>
+	<li><a onclick="restartNetwork('I20312')">1st MP to be suspended for swearing in Parliament: 1877, R. B. Cunninghame Graham</a></li>
+	<li><a onclick="restartNetwork('I27776')">1st Jew to be created a British peer: 1885, Nathan Mayer Rothschild</a></li>
+	<li><a onclick="restartNetwork('I7319')">1st woman to be elected to Parliament: 1918, Constance Markievicz</a></li>
+	<li><a onclick="restartNetwork('I30264')">1st woman to take a seat in Parliament: 1919, Nancy Astor</a></li>
+	</ol>
+	</div>
+	</div>
+	</div>
+	<div class="topButton" onclick="toggleDisplay('peopleContents',document.getElementById('peopleContents'))" style="height:30px; width:100%; border-style: solid none none none; border-width: thin; border-color: #E8E7EF; text-align: center;padding: 10px 0 0;">
+	 &uarr;
+	</div>
+	</div>
+	
+	<div id="storyContents" class="middleContents topContents">
+	<div class="initial">
+	<div style="padding:20px;">Read short essays about historical narratives revealed by <span class="emphasize">Kindred Britain</span> and technical issues the site engages with.</div>
+	<div style="margin: 0px;float:left;width:50%;">
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">HISTORICAL AND CULTURAL</li>
+	<li><a onclick="createVignette('frankenstein','storyContents','.topButton')">Frankenstein</a></li>
+	<li><a onclick="createVignette('erasmus','storyContents','.topButton')">Erasmus Darwin: Europe's First Botanist</a></li>
+	<li><a onclick="createVignette('rivals','storyContents','.topButton')">Rival Relations: Washington and Cornwallis</a></li>
+	</ol>
+	</div>
+	</div>
+	<div style="margin: 0px;float:left;width:50%;">
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">CONCEPTUAL</li>
+	<li><a onclick="createVignette('centrality','storyContents','.topButton')">Centrality and Notability in Genealogy</a></li>
+	<li><a onclick="createVignette('tragedy','storyContents','.topButton')">Computing Tragedy</a></li>
+	</ol>
+	</div>
+	</div>
+	</div>
+		<div class="topButton" onclick="toggleDisplay('storyContents',document.getElementById('storyContents'))" style="height:30px; width:100%; border-style: solid none none none; border-width: thin; border-color: #E8E7EF; text-align: center;padding: 10px 0 0;">
+	 &uarr;
+	</div>
+	</div>
+	
+	<div id="connectionContents" class="middleContents topContents">
+	<div style="padding:20px;">A selection of juxtapositions, underwritten by family ties and uniting people divided by different fates or roles, in <span class="emphasize">Kindred Britain</span>.</div>
+	<div class="innerMiddle">
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Opponents</li>
+	<li><a onclick="pathViz('sent','I3601','I26969')">Thomas Cromwell and Thomas More</a></li>
+	<li><a onclick="pathViz('sent','I2967','I3587')">Charles I and Oliver Cromwell</a></li>
+	<li><a onclick="pathViz('sent','I5457','I3904')">George Washington and George III</a></li>
+	<li><a onclick="pathViz('sent','I28778','I2007')">Napoleon and the Duke of Wellington</a></li>
+	<li><a onclick="pathViz('sent','I17428','I12922')">Benjamin Disraeli and W. E. Gladstone</a></li>
+	<li><a onclick="pathViz('sent','I28856','I17722')">Ulysses S. Grant and Robert E. Lee</a></li>
+	<li><a onclick="pathViz('sent','I14698','I15627')">John Ruskin and J. A. M. Whistler</a></li>
+	<li><a onclick="pathViz('sent','I12441','I15394')">Spencer William Gore and William Marshall (opponents in first Gentlemen&rsquo;s Singles Final at Wimbledon, 1877)</a></li> 
+	<li><a onclick="pathViz('sent','I6515','I30198')">Jacob Epstein and Hamo Thornycroft</a></li>
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Judge and Accused</li>
+	<li><a onclick="pathViz('sent','I30063','I2870')">Valentine Dale and Mary Queen of Scots</a></li>
+	<li><a onclick="pathViz('sent','I29619','I2899')">George Jeffreys and Algernon Sidney</a></li>
+	<li><a onclick="pathViz('sent','I29619','I29788')">George Jeffreys and Charles Speke</a></li>
+	<li><a onclick="pathViz('sent','I29619','I2142')">George Jeffreys and William, Lord Russell</a></li>
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Author and Subject</li>
+	<li><a onclick="pathViz('sent','I27325','I1269')">William Shakespeare and John of Gaunt</a></li>
+	<li><a onclick="pathViz('sent','I9997','I17933')">Alfred Tennyson and the Earl of Cardigan</a></li>
+	</ol>
+	</div>
+	</div>
+	<div class="innerMiddle">
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Sitter and artist</li>
+	<li><a onclick="pathViz('sent','I2968','I28327')">Queen Henrietta Maria, by Anthony Van Dyck</a></li>
+	<li><a onclick="pathViz('sent','I24928','I25848')">Sir Brooke Boothby, by Joseph Wright of Derby</a></li>
+	<li><a onclick="pathViz('sent','I24930','I14576')">Penelope Boothby, by Joshua Reynolds</a></li>
+	<li><a onclick="pathViz('sent','I28937','I28967')">Margaret Kemble Gage, by J. S. Copley</a></li>
+	<li><a onclick="pathViz('sent','I25940','I14552')">Henry Jackson, by Charles Wellington Furse</a></li>
+	<li><a onclick="pathViz('sent','I30235','I7677')">Marianne North, by Julia Margaret Cameron</a></li>
+	<li><a onclick="pathViz('sent','I25536','I23911')">Robert Braithwaite Martineau, by W. Holman Hunt</a></li>
+	<li><a onclick="pathViz('sent','I7674','I30187')">Virginia Woolf, by George Charles Beresford</a></li>
+	<li><a onclick="pathViz('sent','I6212','I30198')">George Curzon, by Hamo Thornycroft</a></li>
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Doctor and patient</li>
+	<li><a onclick="pathViz('sent','I2952','I30148')">Mary Countess of Pembroke and Matthew Lister</a></li>
+	<li><a onclick="pathViz('sent','I28778','I27238')">Napoleon and Barry O&rsquo;Meara</a></li>
+	<li><a onclick="pathViz('sent','I21391','I18222')">Jane Austen and Giles Lyford</a></li>
+
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li class="cdsubhead">Graves: buried side-by-side or in same ground</li>
+	<li><a onclick="pathViz('sent','I2248','I4424')">Geoffrey Chaucer and John Dryden</a></li>
+	<li><a onclick="pathViz('sent','I1889','I2007')">Lord Nelson and Duke of Wellington</a></li>
+	<li><a onclick="pathViz('sent','I21063','I30276')">George Orwell and David Astor</a></li>
+	</ol>
+	</div>
+	</div>
+		<div class="topButton" onclick="toggleDisplay('connectionContents',document.getElementById('connectionContents'))" style="height:30px; width:100%; border-style: solid none none none; border-width: thin; border-color: #E8E7EF; text-align: center;padding: 10px 0 0;">
+	 &uarr;
+	</div>
+	
+	</div>
+	
+	<div id="kbContents" class="topLeftContents topContents">
+	</div>
+	
+<div id="modalSearch" class="modalDialog">	
+  	<div id="modalSearchContents" class="shadowBio">
+		<div>
+		<p><span class="emphasize">Kindred Britain</span> uses current web technology not supported by this browser.</p>
+		<p>Please visit using a browser such as <a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a>, <a href="http://www.apple.com/safari/">Safari</a> or <a href="http://www.mozilla.org/en-US/firefox/new/">Firefox</a>.</p>
+		<p>Meanwhile, if you want you can <a href="http://kindred.stanford.edu/notes.html">read about <span class="emphasize">Kindred Britain</span> and the technology behind the site.</a></p>
+		</div>
+	</div>
+</div>
+<div id="hoverBoth" style="position: absolute;pointer-events:none;">
+<div id="hoverInfo">
+<div id="arrow" class="arrow-right under"></div>
+<div id="arrow" class="arrow-right"></div>
+<div id="hoverContent"></div>
+</div>
+</div>
+<div class="topper" id="top">
+<div id="kbCont" class="masthead topcontents" onclick='toggleDisplay("kbContents")'><a>KINDRED BRITAIN</a></div>
+<div height="100%" class="topcontents" id="navLinks">
+<div class="topButton" onClick='toggleDisplay("helpContents",this)' style="margin-top: -15px;"><img src="images/question_mark_icon.png" /></div>
+<div class="topButton" onmouseover="linkImageUpdate()" onClick='toggleDisplay("shareContents",this)' style="margin-top: -15px;"><img id="linkInputButton" src="images/link_icon.png" /></div>
+<div class="topButton" onClick='toggleDisplay("searchContents",this)' style="margin-top: -15px;"><img src="images/search_icon.png" /></div>
+</div>
+</div>
+<div class="topcontents" id="topmenu">
+<div class="topButtonTop" style="left: 9.5%; right:66.5%;" Value="PEOPLE" onClick='toggleDisplay("peopleContents",this)'>PEOPLE</div>
+<div class="topButtonTop" style="left: 33.5%; right:33.5%;" Value="CONNECTIONS" onClick='toggleDisplay("connectionContents",this)'>CONNECTIONS</div>
+<div class="topButtonTop" style="left: 66.5%; right: 9.5%;" Value="STORIES" onClick='toggleDisplay("storyContents",this)'>STORIES</div>
+</div>
+
+<div id="vignettecontent">
+</div>
+<div id="fullcontent" style="float: left; width:100%; height:100%;">
+<div class="header" id="head">
+<div id="centerbox">
+<div id="titletext" onclick='toggleDisplay("searchShare")'><a>Some Luminaries in Kindred Britain</a></div>
+<div id="searchShare" class="centerContents">
+<div class="sectionheading" style="margin: 0 20px;">Shown in current view:</div>
+<div onclick="toggleDisplay('searchShare')" style="padding: 10px 0 14px;" class="lessarrow">&uarr;</div>
+</div>
+</div>
+</div>
+<div class="pane" id="network">
+<div class="focusButton">
+<div onClick="paneClick('network')" class="panecontrol" style="line-height: 45px;margin:-4px;padding: 0 20px;height: 40px;">Network</div>
+<div id="networkGearButton" style="float: right; height:40px; width:40px;margin: -4px -4px -4px 0;"><img style="height:30px; width:30px;position: relative;top: 5px;" src="images/gear.png" onClick="toggleDisplay('networkOptions')" />
+</div>
+</div>
+<div id="networkOptions" class="paneOptions" style="height:380px;">
+<div id="legend" style="height:85px;">
+<svg class="legendSVG" id="networkLegend" width="450" height="200">
+</svg>
+</div>
+<div style="text-align: left;margin:20px 0;">
+<span>Color</span>
+<div>
+<input title="Color nodes by network centrality" TYPE="button" NAME="button" class="legendButton colorButton" id="colorC" Value="Centrality" onClick='setActive("colorC","colorButton");colorByAttribute("centrality",["#FFD6AD","#FF9966","#E62E00"])' />
+<input title="Color nodes by genealogical distance from an individual mentioned in the Oxford Dictionary of National Biography" TYPE="button" NAME="button" class="legendButton colorButton" id="colorO" Value="ODNB" onClick='setActive("colorO","colorButton");colorByAttribute("odnb",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by date of birth" TYPE="button" NAME="button" class="legendButton colorButton" id="colorB" Value="Birthdate" onClick='setActive("colorB","colorButton");colorByAttribute("birthyear",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by tragedy" TYPE="button" NAME="button" class="legendButton colorButton" id="colorT" Value="Tragedy" onClick='setActive("colorT","colorButton");colorByAttribute("tragedy",["#CCFF99","#5CAD5C","#336600"])' />
+<input title="Color nodes by distance from parents' shared common ancestor (if any)" TYPE="button" NAME="button" class="legendButton colorButton" id="colorR" Value="Inbreeding" onClick='setActive("colorR","colorButton");colorByAttribute("relatedness",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by number of ancestors in Kindred Britain" TYPE="button" NAME="button" class="legendButton colorButton" id="colorD" Value="Depth" onClick='setActive("colorD","colorButton");colorByAttribute("parentless",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by gender" TYPE="button" NAME="button" class="active legendButton colorButton" id="colorG" Value="Gender" onClick='setActive("colorG","colorButton");colorByGender();' />
+</div>
+</div>
+<div style="height: 70px; text-align: left;">
+<span>Layout</span>
+<div>
+<input title="Lay the nodes out hierarchically (not available for nodes that are disconnected)" TYPE="button" NAME="button" class="legendButton netLayoutButton" id='nBT' Value="Tree" onClick="setActive('nBT','netLayoutButton');hierarchicalClick()" />
+<input title="Lay the nodes out by birth and death date" TYPE="button" NAME="button" class="legendButton netLayoutButton" id='nBP' Value="Plot" onClick="setActive('nBP','netLayoutButton');plotNetwork('birthyear','end')" />
+<input title="Allow the nodes to float on the canvas using a force-directed algorithm" TYPE="button" NAME="button" class="legendButton netLayoutButton active" id='nBF' Value="Force" onClick="setActive('nBF','netLayoutButton');forceClick()" />
+<input title="Group nodes by activity sphere (must lay nodes out using Force)" TYPE="button" NAME="button" class="legendButton netProfessionButton" id='nBPr' Value="Professions" onClick="setActive('nBPr','netProfessionButton');addHull()" />
+</div>
+</div>
+<div style="height: 70px; text-align: left;">
+<span>Relationship Types</span>
+<div>
+<p style="padding:0;margin:0"><span><img src="images/mar.png" />Marriage</span></p>
+<p style="padding:0;margin:0"><span><img src="images/lin.png" />Lineage</span></p>
+<p style="padding:0;margin:0"><span><img src="images/sib.png" />Sibling</span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="pane" id="timeline">
+<div class="focusButton">
+<div onClick="paneClick('timeline')" class="panecontrol" style="line-height: 45px;margin:-4px;padding: 0 20px;height: 40px;">Timeline</div>
+<div id="timelineGearButton" style="display: none;float: right; height:40px; width:40px;margin: -4px -4px -4px 0;"><img style="height:30px; width:30px;position: relative;top: 5px;" src="images/gear.png" onClick="toggleDisplay('timelineOptions')"/>
+</div>
+</div>
+<div id="timelineOptions" class="paneOptions" style="display:none; height:350px;">
+<div id="legend" style="height:85px;">
+<svg class="legendSVG" id="timelineLegend" width="450" height="200">
+</svg>
+</div>
+<div style="text-align: left;margin:20px 0;">
+<span>Color</span>
+<div>
+<input title="Color nodes by network centrality" TYPE="button" NAME="button" class="legendButton colorButton" id="colorC" Value="Centrality" onClick='setActive("colorC","colorButton");colorByAttribute("centrality",["#FFD6AD","#FF9966","#E62E00"])' />
+<input title="Color nodes by genealogical distance from an individual mentioned in the Oxford Dictionary of National Biography" TYPE="button" NAME="button" class="legendButton colorButton" id="colorO" Value="ODNB" onClick='setActive("colorO","colorButton");colorByAttribute("odnb",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by date of birth" TYPE="button" NAME="button" class="legendButton colorButton" id="colorB" Value="Birthdate" onClick='setActive("colorB","colorButton");colorByAttribute("birthyear",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by tragedy" TYPE="button" NAME="button" class="legendButton colorButton" id="colorT" Value="Tragedy" onClick='setActive("colorT","colorButton");colorByAttribute("tragedy",["#CCFF99","#5CAD5C","#336600"])' />
+<input title="Color nodes by distance from parents' shared common ancestor (if any)" TYPE="button" NAME="button" class="legendButton colorButton" id="colorR" Value="Inbreeding" onClick='setActive("colorR","colorButton");colorByAttribute("relatedness",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by number of ancestors in Kindred Britain" TYPE="button" NAME="button" class="legendButton colorButton" id="colorD" Value="Depth" onClick='setActive("colorD","colorButton");colorByAttribute("parentless",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by gender" TYPE="button" NAME="button" class="active legendButton colorButton" id="colorG" Value="Gender" onClick='setActive("colorG","colorButton");colorByGender();' />
+</div>
+</div>
+<div style="text-align: left;">
+<span>Layout</span>
+<div>
+<input TYPE="button" NAME="button" class="legendButton timelineLayoutButton active" id="tBT" Value="People" onClick="eventViewOff()" />
+<input TYPE="button" NAME="button" class="legendButton timelineLayoutButton" id="tBE" Value="Major Events" onClick="eventView()" />
+</div>
+</div>
+<div style="height: 50px; text-align: left;margin-top:20px;">
+<span>Historical Events</span>
+<div>
+<input TYPE="button" NAME="button" class="legendButton timelineGuideButton" id="tBVs" Value="Shown" onClick="hideGuide()" />
+<input TYPE="button" NAME="button" class="legendButton timelineGuideButton active" id="tBVh" Value="Hidden" onClick="hideGuide()" />
+</div>
+</div>
+</div>
+</div>
+<div class="pane" id="map">
+<div class="focusButton">
+<div onClick="paneClick('map')" class="panecontrol" style="line-height: 45px;margin:-4px;padding: 0 20px;height: 40px;">Geography</div>
+<div id="mapGearButton" style="display: none;float: right; height:40px; width:40px;margin: -4px -4px -4px 0;"><img style="height:30px; width:30px;position: relative;top: 5px;"src="images/gear.png" onClick="toggleDisplay('mapOptions')"/></div>
+</div>
+<div id="mapOptions" class="paneOptions" style="display:none;">
+<div id="legend" style="height:85px;">
+<svg class="legendSVG" id="mapLegend" width="450" height="200">
+</svg>
+</div>
+<div style="text-align: left;margin:20px 0;">
+<span>Color</span>
+<div>
+<input title="Color nodes by network centrality" TYPE="button" NAME="button" class="legendButton colorButton" id="colorC" Value="Centrality" onClick='setActive("colorC","colorButton");colorByAttribute("centrality",["#FFD6AD","#FF9966","#E62E00"])' />
+<input title="Color nodes by genealogical distance from an individual mentioned in the Oxford Dictionary of National Biography" TYPE="button" NAME="button" class="legendButton colorButton" id="colorO" Value="ODNB" onClick='setActive("colorO","colorButton");colorByAttribute("odnb",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by date of birth" TYPE="button" NAME="button" class="legendButton colorButton" id="colorB" Value="Birthdate" onClick='setActive("colorB","colorButton");colorByAttribute("birthyear",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by tragedy" TYPE="button" NAME="button" class="legendButton colorButton" id="colorT" Value="Tragedy" onClick='setActive("colorT","colorButton");colorByAttribute("tragedy",["#CCFF99","#5CAD5C","#336600"])' />
+<input title="Color nodes by distance from parents' shared common ancestor (if any)" TYPE="button" NAME="button" class="legendButton colorButton" id="colorR" Value="Inbreeding" onClick='setActive("colorR","colorButton");colorByAttribute("relatedness",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by number of ancestors in Kindred Britain" TYPE="button" NAME="button" class="legendButton colorButton" id="colorD" Value="Depth" onClick='setActive("colorD","colorButton");colorByAttribute("parentless",["#3366CC","#FFFF99","#993333"])' />
+<input title="Color nodes by gender" TYPE="button" NAME="button" class="active legendButton colorButton" id="colorG" Value="Gender" onClick='setActive("colorG","colorButton");colorByGender();' />
+</div>
+</div>
+<div style="height: 150px; text-align: left;">
+<span>Cities</span>
+<div>
+<input title="Display cities" TYPE="button" NAME="button" class="legendButton mapDisplayButton active" id='mBC' Value="Shown" onClick="onOffCities()" />
+<input title="Hide Cities" TYPE="button" NAME="button" class="legendButton mapDisplayButton" id='mBCh' Value="Hidden" onClick="onOffCities()" />
+</div>
+</div>
+</div>
+<div class="footer">
+Created by <a href="https://english.stanford.edu/people/nicholas-jenkins">Nicholas Jenkins</a>, <a href="https://dhs.stanford.edu">Elijah Meeks</a> and <a href="http://alignedleft.com">Scott Murray</a> | <a href="mailto:njenkins@stanford.edu">© 2013 Nicholas Jenkins</a> | Published by <a href="http://library.stanford.edu">Stanford University Libraries</a>
+</div>
+</div>
+</div>
+</body>
+<footer>
+<script type="text/javascript">  
+  var _gaq = _gaq || [];
+
+_gaq.push(['_setAccount', 'UA-42336471-1']);
+
+_gaq.push(['_trackPageview']);
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+
+
+(function() {
+
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+
+})();  
+
+setTimeout(function(){var a=document.createElement("script");
+var b=document.getElementsByTagName("script")[0];
+a.src=document.location.protocol+"//dnn506yrbagrg.cloudfront.net/pages/scripts/0012/9530.js?"+Math.floor(new Date().getTime()/3600000);
+a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+</script>
+</footer>
+</html>

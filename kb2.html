@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+<head>
+	<title>Kindred Britain</title>
+		<link rel="stylesheet" href="leaflet.css"></link>
+		<link type="text/css" rel="stylesheet" href="kb.css" />
+		<link href='https://fonts.googleapis.com/css?family=Sorts+Mill+Goudy:400,400italic' rel='stylesheet' type='text/css'" />
+		<script src="js/d3v3/d3.v3.min.js"></script>
+		<script src="js/d3v3/d3.geo.projection.v0.min.js"></script>
+		<script src="js/d3v3/topojson.js"></script>
+		<script type="text/javascript" src="kb_graph.js"></script>
+		<script type="text/javascript" src="intro.js"></script>
+		<script type="text/javascript" src="kb_map.js"></script>
+		<script type="text/javascript" src="swim.js"></script>
+		<script type="text/javascript" src="settings_kb.js"></script>
+		<script type="text/javascript" src="occu_id.js"></script>
+		<script type="text/javascript" src="startuppaths.js"></script>
+		<script type="text/javascript" src="stories.js"></script>
+
+</head>
+
+<body onload="kbStartUp()">
+  	<div id="bioFloatContents1" class="bioContents">
+	</div>
+
+  	<div id="bioFloatContents2" class="bioContents">
+	</div>
+
+  	<div id="bioFloatContents3" class="bioContents shadowBio">
+	</div>
+
+	<div id="searchContents" class="topRightContents topContents">
+	<div style="width:100%; height: 23px; border-color: #E5E5E5; border-width: thin; border-style: none; border-bottom-style: solid;">
+	<input TYPE="button" id="indivSearchButton" NAME="button" class="searchButton active" Value="INDIVIDUALS" onClick='searchButtonClick("indivSearchButton")' />
+	<input TYPE="button" id="connectSearchButton" NAME="button" class="searchButton" Value="CONNECTIONS" onClick='searchButtonClick("connectSearchButton")' />
+	<input TYPE="button" id="groupSearchButton" NAME="button" class="searchButton" Value="GROUPS" onClick='searchButtonClick("groupSearchButton")' />
+		</div>
+		<div style="width:100%; height: 20px; border-color: rgba(0,0,0,0.3); border-width: thin; border-style: none; border-bottom-style: dotted;"></div>
+<div style="width:100%; margin:5px; padding:0px;">
+
+		<div style="width:100%; height: 20px;"><input TYPE="text" id="idInputBox" placeholder="name to search" onkeydown="return press( event,document.getElementById('idInputBox').value,'search','X','searchResultsDiv');"/>  	<input TYPE="button" NAME="button" Value="Search" id="runSearchButton" onClick="createSearchTable(document.getElementById('idInputBox').value,'search','X','searchResultsDiv')" /></div>
+		</div>
+  	<div style="width:100%; height: 20px;">
+		 <span id="searchTimeTextDescription">Born anytime</span>
+</div>
+  	<div style="width:100%; height: 40px;">
+		<svg id="searchBrushSVG">
+			
+		</svg>
+	</div>
+
+
+  	<div id="searchResultsDiv" style="max-height: 250px; width:100%; margin:0px; padding:0px; overflow: auto;">
+  	</div>
+  		<div class="topButton" onclick="toggleDisplay('searchContents',document.getElementById('searchContents'))" style="height:30px; width:99%; margin: 5px; border-style: solid none none none; border-width: thin; border-color: #C0C0C0; text-align: center;">
+	 &uarr;
+	</div>
+	</div>
+	<div id="shareContents" class="topRightContents topContents">
+	<div>Individual sharing buttons will be added near the end of the project</div>
+	<div><input type="button" value="Share on #KindredBritain" /></div>
+	<div>Direct link to this view:</div>
+	<div><input type="url" onClick="this.select();" id="linkUrlBox" style="width: 80%;"value="https://orbis-dev.stanford.edu/poh/kindred/kb2.html" /></div>
+	<div class="topButton" onclick="toggleDisplay('shareContents',document.getElementById('shareContents'))" style="height:30px; width:99%; margin: 5px; border-style: solid none none none; border-width: thin; border-color: #C0C0C0; text-align: center;">
+	 &uarr;
+	</div>
+	</div>
+	<div id="helpContents" class="topRightContents topContents">
+	<p>Kindred Britain was built by many hands over the course of many years. <a>More &rarr;</a></p>
+	<p>Nicholas Jenkins and his colonel built the database by hand. <a>More &rarr;</a></p>
+	<p>Elijah Meeks, Karl Grossner, and Matt Jockers provided critical support by writing code, setting up databases, and doing all the things that digital humanities scholarship requires. <a>More &rarr;</a></p>
+	<p>Scott Murray painstakingly designed the site and interactive elements. <a>More &rarr;</a></p>
+	<p>This publication was made possible by generous support from the Stanford University Libraries, the Stanford Department of English, and the Stanford University Office of the President. <a>More &rarr;</a></p>
+	<div class="topButton" onclick="toggleDisplay('helpContents',document.getElementById('helpContents'))" style="height:30px; width:99%; margin: 5px; border-style: solid none none none; border-width: thin; border-color: #C0C0C0; text-align: center;">
+	 &uarr;
+	</div>
+	</div>
+	
+	<div id="peopleContents" class="middleContents topContents">
+		<div class="initial">
+		<div style="width: 90%;">People in <span class="thicker">Kindred Britain</span> are interesting...
+	</div>
+	<div style="width: 48%; margin: 0px; float: left;">
+	<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">LUMINARIES</span></li>
+	<li><a onclick="restartNetwork('I5906')">Erasmus Darwin</a></li>
+	<li><a onclick="restartNetwork('I21391')">Jane Austen</a></li>
+	<li><a onclick="restartNetwork('I5')">WH Auden</a></li>
+	<li><a onclick="restartNetwork('I5906')">Erasmus Darwin</a></li>
+	<li><a onclick="restartNetwork('I5906')">Erasmus Darwin</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">FAMOUS FAMILIES</span></li>
+	<li><a onclick="changeTitle('People with the surname Tudor');newsFeed('Tudor','name','bioFloatContents1')">Tudors</a></li>
+	<li><a onclick="changeTitle('People with the surname Darwin');newsFeed('Darwin','name','bioFloatContents1')">Darwins</a></li>
+	<li><a onclick="changeTitle('People with the surname Newton');newsFeed('Newton','name','bioFloatContents1')">Newtons</a></li>
+	<li><a onclick="changeTitle('People with the surname Smith');newsFeed('Smith','name','bioFloatContents1')">Smiths</a></li>
+	<li><a onclick="changeTitle('People with the surname Austen');newsFeed('Austen','name','bioFloatContents1')">Austens</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+	</div>
+	<div style="width: 48%; margin: 0px; float: left;">
+		<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">INTERESTING PLACES</span></li>
+	<li><a onclick="changeTitle('People associated with Norway');viz01(17,'loc')">Norway</a></li>
+	<li><a onclick="changeTitle('People associated with India');viz01(1161,'loc')">India</a></li>
+	<li><a onclick="changeTitle('People associated with South Africa');viz01(1219,'loc')">South Africa</a></li>
+	<li><a onclick="changeTitle('People associated with Devon');viz01(17,'loc')">Devon</a></li>
+	<li><a onclick="changeTitle('People associated with Egypt');viz01(1132,'loc')">Egypt</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+		<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">NOVEL OCCUPATIONS</span></li>
+	<li><a onclick="changeTitle('People with the occupation of Novelist');newsFeed(180,'occ','bioFloatContents1')">Novelist</a></li>
+	<li><a onclick="changeTitle('People with the occupation of Poet');newsFeed(181,'occ','bioFloatContents1')">Poet</a></li>
+	<li><a onclick="changeTitle('People with the occupation of Lunatic');newsFeed(250,'occ','bioFloatContents1')">Lunatic</a></li>
+	<li><a onclick="changeTitle('People with the occupation of Naval Officer');newsFeed(166,'occ','bioFloatContents1')">Naval Officer</a></li>
+	<li><a onclick="changeTitle('People with the occupation of Prime Minister');newsFeed(134,'occ','bioFloatContents1')">Prime Minister</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+	</div>
+	</div>
+	<div class="topButton" onclick="toggleDisplay('peopleContents',document.getElementById('peopleContents'))" style="height:30px; width:99%; margin: 5px; border-style: solid none none none; border-width: thin; border-color: #C0C0C0; text-align: center;">
+	 &uarr;
+	</div>
+	</div>
+	
+	<div id="storyContents" class="middleContents topContents">
+				<div class="initial">
+		<div style="width: 90%;">The individuals in <span class="thicker">Kindred Britain</span> can be tied together in stories that highlight the importance of family in British culture...
+	</div>
+	<div style="width: 90%; margin: 0px;">
+	<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">HISTORICAL AND CULTURAL</span></li>
+	<li><a onclick="createVignette('erasmus','storyContents','.topButton')">Europe's First Botanist</a></li>
+	<li><a onclick="createVignette('shelley','storyContents','.topButton')">Mary and Percy Bysshe Shelley</a></li>
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">TECHNICAL</span></li>
+	<li><a onclick="createVignette('centrality','storyContents','.topButton')">Centrality and Notability in Genealogy</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+	</div>
+				</div>
+		<div class="topButton" onclick="toggleDisplay('storyContents',document.getElementById('storyContents'))" style="height:30px; width:99%; margin: 5px; border-style: solid none none none; border-width: thin; border-color: #C0C0C0; text-align: center;">
+	 &uarr;
+	</div>
+	</div>
+	
+	<div id="connectionContents" class="middleContents topContents">
+	<div style="width: 90%;">Every individual in <span class="thicker">Kindred Britain</span> can be connected to any other individual. We often discover surprising connections between people through networks of relationships--ancestors, descendents, marriages and illicit partnerships.
+	</div>
+	<div style="width: 48%; margin: 0px; float: left;">
+	<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">UNEXPECTED CONNECTIONS</span></li>
+	<li><a onclick="pathViz('sent','I7462','I2135')">Charles Darwin and Winston Churchill</a></li>
+	<li><a onclick="pathViz('sent','I27868','I7674')">Kevin Bacon and Virginia Woolf</a></li>
+	<li><a onclick="pathViz('sent','I17760','I17722')">Zachary Taylor and Robert E Lee</a></li>
+	<li><a onclick="pathViz('sent','I2777','I5221')">Jane Austen and Matthew Crawley</a></li>
+	<li><a onclick="pathViz('sent','I6525','I27325')">Shakespeare and Sigmund Freud</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+	<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">FAMOUS FAMILIES</span></li>
+	<li><a onclick="newsFeed('Tudor','name','bioFloatContents1')">Tudors</a></li>
+	<li><a onclick="newsFeed('Darwin','name','bioFloatContents1')">Darwins</a></li>
+	<li><a onclick="newsFeed('Newton','name','bioFloatContents1')">Newtons</a></li>
+	<li><a onclick="newsFeed('Smith','name','bioFloatContents1')">Smiths</a></li>
+	<li><a onclick="newsFeed('Austen','name','bioFloatContents1')">Austens</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+	</div>
+	<div style="width: 48%; margin: 0px; float: left;">
+		<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">INTERESTING PLACES</span></li>
+	<li><a onclick="countySelected(17)">Norway</a></li>
+	<li><a onclick="newsFeed('Darwin','name','bioFloatContents1')">Maine</a></li>
+	<li><a onclick="newsFeed('Newton','name','bioFloatContents1')">Northampshire</a></li>
+	<li><a onclick="newsFeed('Smith','name','bioFloatContents1')">Egypt</a></li>
+	<li><a onclick="newsFeed('Austen','name','bioFloatContents1')">Australia</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+		<div class="contentsDiv">
+	<ol>
+	<li><span class="thicker">NOVEL OCCUPATIONS</span></li>
+	<li><a onclick="newsFeed('Tudor','name','bioFloatContents1')">Novelist</a></li>
+	<li><a onclick="newsFeed('Darwin','name','bioFloatContents1')">Poet</a></li>
+	<li><a onclick="newsFeed('Newton','name','bioFloatContents1')">Lunatic</a></li>
+	<li><a onclick="newsFeed('Smith','name','bioFloatContents1')">Naval Officer</a></li>
+	<li><a onclick="newsFeed('Austen','name','bioFloatContents1')">Prime Minister</a></li>
+	<li><a>More &rarr;</a></li>
+	</ol>
+	</div>
+	</div>
+		<div class="topButton" onclick="toggleDisplay('connectionContents',document.getElementById('connectionContents'))" style="height:30px; width:99%; margin: 5px; border-style: solid none none none; border-width: thin; border-color: #C0C0C0; text-align: center;">
+	 &uarr;
+	</div>
+	
+	</div>
+	
+	<div id="kbContents" class="topLeftContents topContents">
+	</div>
+	
+<div id="modalSearch" class="modalDialog">	
+  	<div id="modalSearchContents">
+		<a onclick="modalClose('modalSearch');" title="Close" class="close">X</a>
+	</div>
+</div>
+<div id="hoverInfo" class="shadowBio">
+<div id="arrow" class="arrow-right"></div>
+<div id="hoverContent"></div>
+</div>
+<div class="topper" id="top">
+<div height="100%" style="padding: 10px;" class="masthead topcontents"><a onclick='toggleDisplay("kbContents")'>KINDRED BRITAIN</a></div>
+<div height="100%" class="topcontents" id="topmenu">
+<input TYPE="button" NAME="button" class="topButton" Value="PEOPLE" style="float: none;" onClick='toggleDisplay("peopleContents",this)' />
+<input TYPE="button" NAME="button" class="topButton" Value="CONNECTIONS" style="float: none;" onClick='toggleDisplay("connectionContents",this)' />
+<input TYPE="button" NAME="button" class="topButton" Value="STORIES" style="float: none;" onClick='toggleDisplay("storyContents",this)' />    
+</div>
+<div height="100%" class="topcontents" id="navLinks">
+<div class="topButton" onClick='toggleDisplay("helpContents",this)'><img src="images/question_mark_icon.png" /></div>
+<div class="topButton" onmouseover="linkImageUpdate()" onClick='toggleDisplay("shareContents",this)'><img id="linkInputButton" src="images/link_icon.png" /></div>
+<div class="topButton" onClick='toggleDisplay("searchContents",this)'><img src="images/search_icon.png" /></div>
+</div>
+</div>
+
+<div id="vignettecontent">
+</div>
+<div id="fullcontent" style="float: left; width:100%; height:100%;">
+<div class="header" id="head">
+<div id="centerbox">
+<div id="titletext" onclick='toggleDisplay("searchShare")'><a>Some Luminaries in Kindred Britain</a></div>
+<div id="searchShare" class="centerContents">
+<div class="sectionheading">Shown in current view:</div>
+<div onclick="toggleDisplay('searchShare')" class="lessarrow">&uarr;</div>
+</div>
+</div>
+</div>
+<div class="pane" id="network">
+<div class="focusButton" style="width: 200px;"><img src="images/darrow.png" onClick="focusDiv('network')" style="float: left; height:30px; width:30px;" />
+<input TYPE="button" NAME="button" class="panecontrol" Value="Network" onClick="focusDiv('network')" />
+<img  style="float: right; height:30px; width:30px;" src="images/gear.png" onClick="toggleDisplay('networkOptions')" />
+<div id="networkOptions" class="paneOptions" style="display:none;">
+<div style="width: 200px; height: 110px; text-align: left;">
+<span>Layout</span>
+<div>
+<input TYPE="button" NAME="button" class="legendButton" Value="Tree" onClick="defocusNetwork()" />
+<input TYPE="button" NAME="button" class="legendButton" Value="Plot" onClick='plotNetwork("birthyear","end")' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Force" onClick="freeNodes()" />
+<input TYPE="button" NAME="button" class="legendButton" Value="Professions" onClick="addHull()" />
+</div>
+</div>
+<div style="width: 200px; height: 50px; text-align: left;">
+<span>Color</span>
+<div>
+<input TYPE="button" NAME="button" class="legendButton" Value="Centrality" onClick='colorByAttribute("centrality",["#FFD6AD","#FF9966","#E62E00"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="ODNB" onClick='colorByAttribute("odnb",["#3366CC","#FFFF99","#993333"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Birthdate" onClick='colorByAttribute("birthyear",["#3366CC","#FFFF99","#993333"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Tragedy" onClick='colorByAttribute("tragedy",["#CCFF99","#5CAD5C","#336600"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Relatedness" onClick='colorByAttribute("relatedness",["#3366CC","#FFFF99","#993333"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Depth" onClick='colorByAttribute("parentless",["#3366CC","#FFFF99","#993333"])' />
+</div>
+</div>
+</div>
+</div>
+<div id="legend" style="background: rgba(255,255,255,.7); position: absolute; right: 230px; top: 10px; border-style: solid;">
+<svg id="legendSVG" width="300" height="200">
+</svg>
+</div>
+</div>
+<div class="pane" id="timeline">
+<div class="focusButton"  style="width:200px;"><img onClick="focusDiv('timeline')" src="images/darrow.png" style="float: left; height:30px; width:30px;" />
+	<input TYPE="button" NAME="button" class="panecontrol" Value="Timeline" onClick="focusDiv('timeline')" />
+	<img  style="float: right; height:30px; width:30px;" src="images/gear.png" onClick="toggleDisplay('timelineOptions')"/>
+<div id="timelineOptions" class="paneOptions" style="display:none;">
+<div style="width: 200px; height: 80px; text-align: left;">
+<span>Layout</span>
+<div>
+<input TYPE="button" NAME="button" class="legendButton" Value="Pillars" onClick="verticalTimelines()" />
+<input TYPE="button" NAME="button" class="legendButton" Value="Traditional" onClick="traditionalTimelines()" />
+</div>
+</div>
+<div style="width: 200px; height: 50px; text-align: left;">
+<span>Color</span>
+<div>
+<input TYPE="button" NAME="button" class="legendButton" Value="Centrality" onClick='colorByAttribute("centrality",["#FFD6AD","#FF9966","#E62E00"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="ODNB" onClick='colorByAttribute("odnb",["#3366CC","#FFFF99","#993333"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Birthdate" onClick='colorByAttribute("birthyear",["#3366CC","#FFFF99","#993333"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Tragedy" onClick='colorByAttribute("tragedy",["#CCFF99","#5CAD5C","#336600"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Relatedness" onClick='colorByAttribute("relatedness",["#3366CC","#FFFF99","#993333"])' />
+<input TYPE="button" NAME="button" class="legendButton" Value="Depth" onClick='colorByAttribute("parentless",["#3366CC","#FFFF99","#993333"])' />
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="pane" id="map">
+<div class="focusButton" style="width:200px;"><img src="images/darrow.png" onClick="focusDiv('map')" style="float: left; height:30px; width:30px;" /><input TYPE="button" NAME="button" class="panecontrol" Value="Map" onClick="focusDiv('map')" /><img  style="float: right; height:30px; width:30px;" src="images/gear.png" onClick="toggleDisplay('mapOptions')"/>
+<div id="mapOptions" class="paneOptions" style="display:none;"><img src="maplegend.svg" />
+</div>
+</div>
+</div>
+</div>
+<div class="footer">
+Created by <a href="http://english.stanford.edu/bio.php?name_id=65">Nicholas Jenkins</a>, <a href="https://dhs.stanford.edu">Elijah Meeks</a> and <a href="http://alignedleft.com">Scott Murray</a>
+</div>
+</body>
+
+</html>

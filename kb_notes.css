@@ -1,0 +1,393 @@
+body {
+	margin: 0;
+	font-family: 'Sorts Mill Goudy', serif;
+}
+
+ul {
+	list-style-type: disc;
+}
+
+#acknowledgementsSection ul {
+	margin-top: 5px;
+}
+
+#acknowledgementsSection p.subheading {
+	line-height: 20px;
+}
+
+#shakespeareCitationOrigin {
+	padding-left:145px;
+}
+
+a {
+	text-decoration:none;
+	color: #0D00BE;
+}
+
+a:hover {
+    color: #51A1C9;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a.focusAction {
+	color: #000000;
+	background: rgba(255, 251, 178, 1);
+	border-color: rgba(255, 251, 178, 1);
+	border-width: 1px;
+	border-style: dashed;
+}
+a.focusAction:link {
+	border-width: 1px;
+	border-style: dashed;
+	border-color: gray;
+}
+
+a.focusAction:focus {
+	border-width: 1px;
+	border-style: dashed;
+	border-color: #FF5959;
+}
+
+a.focusAction:hover {
+	border-width: 1px;
+	border-style: dashed;
+	border-color: #FF5959;
+	text-decoration: none;
+}
+
+a.pastItems:hover {
+	font-weight:900;
+}
+
+a.indivAction {
+	color: #808008;
+	font-weight:900;
+}
+
+.header {
+	height: 70px;
+}
+
+.headerTitle{
+	float: left;
+	padding: 25px 30px 0 30px;
+}
+
+.headerMasthead{
+	letter-spacing: .25em;
+	text-transform:uppercase;
+}
+
+.menu {
+	width: 330px;
+	float: left;
+	padding-top: 30px;
+}
+
+.menuItem {
+	padding: 0px 30px 0px 30px;
+	line-height: 40px;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.menuItem:hover {
+	cursor: pointer;
+	background: #dafcfa;
+}
+
+.menuItem.selected:hover {
+	background: #a9e0dc;
+}
+
+@media print
+{
+	#menu {
+		display:none;
+	}
+	
+	#header {
+		display:none;
+	}
+
+	.content{
+		height:auto;
+		width:auto;
+	}
+
+	.contentItem {
+		padding-top: 30px;
+		padding-left: 30px;
+		padding-right:30px;
+		width:auto;
+		font-size: 16px;
+		line-height: 20px;
+	}
+}
+
+@media screen {
+.content {
+	height: 600px;
+	overflow-y: auto;
+	background: url(images/linedpaper.png) repeat top left fixed;
+}
+
+.contentItem {
+	padding-top: 30px;
+	padding-left: 30px;
+	width: 400px;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+#statisticsSection {
+	/*width: 600px;*/
+}
+
+}
+
+.menuTitle {
+	padding-left: 30px;
+	font-size: 13px;
+	margin: 0;
+	color: #808080;
+}
+
+.selected {
+	background: #dafcfa;
+}
+
+.contentTitle {
+	margin: 0;
+	font-size: 24px;
+	font-weight: bold;
+	color: black;
+}
+
+.byline {
+	font-size: 18px;
+	font-style: italic;
+	line-height: 36px;
+}
+
+.boldtext {
+	font-weight: 900; 
+}
+
+.italic {
+	font-style: italic;
+}
+
+.bold {
+	font-weight: bolder;
+	text-transform: uppercase;
+	font-size: 12px;
+}
+
+.citation {
+	vertical-align: super;
+	font-size: 12px;
+}
+
+.inTextCitation {
+	margin-right: 80px;
+	margin-left: 80px;
+	font-size:13px;
+}
+
+.inTextCitationIndent {
+	text-indent: 40px;
+}
+
+.H1link {
+	font-size: 16px;
+	text-decoration: none;
+}
+
+.H2link {
+	font-size: 15px;
+	margin-left: 30px;
+	text-decoration: none;
+}
+
+.H3link {
+
+	font-size: 14px;
+	margin-left: 60px;
+	text-decoration: none;
+}
+
+#userguide_toc li > a, #faq_toc li > a {
+	text-decoration: none;
+}
+
+
+hr.divider {
+	border: 0;
+	margin: 0;
+	height: 1px;
+	width: 100%;
+	background: #f0f0f0;
+}
+
+.buttonContainer {
+	float: right;
+}
+
+.hidden {
+	display: none;
+}
+
+.launchButton {
+	float: right;
+	background-color: #a9e0dc;
+	background: #a9e0dc;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #69ada8;
+	display: inline-block;
+	color: #000000;
+	font-size: 13px;
+	font-family: 'Sorts Mill Goudy', serif;
+	padding: 10px;
+	margin: 20px 30px 15px 10px;
+	text-transform:uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	line-height: 8px;
+	height: 26px;
+	text-align: center;
+	font-weight: 600;
+}
+
+.launchButton:hover {
+	background-color: #fffbb2;
+	color: #333333;
+	border-color: #999999;
+}
+
+.launchButton:active {
+	background-color: #ffe4a9;
+	border-color:#ffaf00;
+}
+
+.toc {
+	margin-top: 0px;
+	padding-left: 20px;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+.tocItem {
+	text-decoration: none;
+}
+
+.htmlFix {
+	margin: 0px 0px 0px 0px;
+}
+
+.subheading{
+    margin: 0px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 36px;
+    text-transform: uppercase;
+}
+
+.subh2 {
+    font-size: 18px;
+}
+
+.subh3 {
+	font-size: 16px;
+}
+
+.subheading + p, .subh2 + p, .subh3 + p, .subh3 + ul, .statsHeading + p {
+	margin-top:0px;
+}
+
+.querydata {
+	margin: 0px;
+	font-size: 10px;
+	color: #C41A16;
+	font-weight: bold;
+}
+
+.centerText {
+	text-align: center;
+}
+
+.essayFormat {
+	text-indent: 0px;
+	
+}	
+.indent {
+	text-indent: 30px;
+}
+
+.figureText {
+	font-weight: bold;
+	font-size: 11px;
+	line-height: 26px;
+	text-align: center;
+}
+
+.imgCenter {
+	margin-right: auto;
+	margin-left: auto;
+	display: block;
+}
+
+#userguide_content li {
+	margin-bottom: 5px;
+}
+
+
+#faq_content h2 {
+	line-height: 20px;
+	margin-bottom: 16px;
+}
+
+img {
+	border-style:solid;
+	border-width:1px;
+	border-color: #cccccc;
+	overflow: visible;
+}
+
+#developingSection img {
+	max-width: 400px;
+}
+
+#statisticsSection img {
+	max-width: 600px;
+}
+
+.imageCaption {
+	font-style: italic;
+    line-height: 18px;
+    text-indent: -60px;
+    margin-left: 60px;
+    margin-bottom: 20px;
+}
+
+#statisticsSection .imageCaption {
+	max-width:400px;
+}
+
+sup, sub {
+	height: 0;
+	line-height: 1;
+	vertical-align: baseline;
+	_vertical-align: bottom;
+	position: relative;
+	
+}
+
+sup {
+	bottom: 1ex;
+}
+
+

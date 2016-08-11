@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Testing d3.js in Leaflet.js</title>
+	<link rel="stylesheet" href="leaflet.css"></link>
+	<script type="text/javascript" src="../lib/d3.v2.js"></script>
+	<script src="../lib/leaflet-src.js"></script>
+	<style type="text/css">
+svg , g
+{
+  border: solid 3px red;
+	 
+  stroke-width: 1.5px;
+}
+circle
+{
+fill-opacity: 0.9;
+stroke: black;
+stroke-width: 2;
+}
+
+	</style>
+</head>
+<body>
+
+	<div id="map" style="width: 800px; height: 800px;position:relative"></div>
+		
+	
+<script type="text/javascript">
+
+	var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/3eb45b95929d472d8fe4a2a5dafbd314/998/256/{z}/{x}/{y}.png',
+		cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+		cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttribution});
+
+	var osites = new L.TileLayer.WMS("http://geoserver.stanford.edu/geoserver/orbis/wms", {
+	    layers: 'orbis:o_sitesnew',
+	    format: 'image/png',
+	    transparent: true,
+	    attribution: "Stanford Stuff"
+	});
+
+	var oroads = new L.TileLayer.WMS("http://geoserver.stanford.edu/geoserver/orbis/wms", {
+	    layers: 'orbis:o_roads',
+	    format: 'image/png',
+	    transparent: true,
+	    attribution: "Stanford Stuff"
+	});
+
+	var map = new L.Map('map', {
+		center: new L.LatLng( 47.0176,2.3427,6), 
+		zoom: 5, 
+		layers: [cloudmade,osites,oroads]
+	});
+					
+	/* Initialize the SVG layer */
+	map._initPathRoot()    
+
+	/* We simply pick up the SVG from the map object */
+	
+var svg2 = d3.select(map.getPanes().overlayPane).append("svg"),
+g2 = svg2.append("g");
+
+d3.json("world-countries_agg.json", function(collection2) {
+  bounds = d3.geo.bounds(collection2),
+      path = d3.geo.path().projection(project);
+
+  feature2 = g2.selectAll("path")
+      .data(collection2.features)
+    .enter().append("path");
+
+  map.on("viewreset", reset);
+
+	d3.json("selectionSites.json", function(sitesData) {
+		 sites2 = g2.selectAll("circle")
+  		.data(sitesData.features)
+  		.enter().append("circle").style("cursor", "pointer").on("click",testClick).on("touchstart",testClick);
+
+			sitesData.features.forEach(function(d) {
+				d.LatLng = new L.LatLng(d.geometry.coordinates[1],d.geometry.coordinates[0])
+			})
+
+			
+		  reset();
+	
+	})
+
+
+  // Reposition the SVG to cover the features.
+
+  // Use Leaflet to implement a D3 geographic projection.
+//  addSites();
+	var colorramp=d3.scale.linear().domain([30000,2500,0]).range(["#840a31","#ecc7ad","#4550b9"]);
+	feature2.transition().duration(1000).style("fill", function(d) {return colorramp(d["b"])}).style("stroke", function(d) {return colorramp(d["c"])}).style("opacity",.5);
+
+});
+
+function project(x) {
+    var point = map.latLngToLayerPoint(new L.LatLng(x[1], x[0]));
+    return [point.x, point.y];
+  }
+
+function testClick(d,i) {
+	d3.select(this).style("fill","yellow");
+}
+
+function reset() {
+    var bottomLeft = project(bounds[0]),
+        topRight = project(bounds[1]);
+
+    svg2 .attr("width", topRight[0] - bottomLeft[0])
+        .attr("height", bottomLeft[1] - topRight[1])
+        .style("margin-left", bottomLeft[0] + "px")
+        .style("margin-top", topRight[1] + "px");
+
+    g2   .attr("transform", "translate(" + -bottomLeft[0] + "," + -topRight[1] + ")");
+
+    feature2.attr("d", path);
+
+	  sites2.attr("cx",function(d) { return map.latLngToLayerPoint(d.LatLng).x})
+	  sites2.attr("cy",function(d) { return map.latLngToLayerPoint(d.LatLng).y})
+	  sites2.attr("r",function(d) { return ((d.properties.rank == 100) ? 10 : 4)/50*Math.pow(2,map.getZoom())})
+	  sites2.style("fill", function(d) { return (d.properties.rank == 100) ? "blue" : "purple"})
+	  sites2.style("opacity", .8)
+	  sites2.style("stroke-width", 2)
+
+  }
+
+
+
+</script>
+</body>
+</html>

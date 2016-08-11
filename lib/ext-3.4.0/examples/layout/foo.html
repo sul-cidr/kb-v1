@@ -1,0 +1,162 @@
+<html>
+<head>
+    <title>VBox Layout</title>
+    <link rel="stylesheet" type="text/css" href="../../resources/css/ext-all.css"/>
+
+    <!-- GC -->
+    <!-- LIBS -->
+    <script type="text/javascript" src="../../adapter/ext/ext-base.js"></script>
+    <!-- ENDLIBS -->
+
+    <script type="text/javascript" src="../../ext-all.js"></script>
+
+    <style type="text/css">
+        html, body {
+            font: normal 12px verdana;
+            margin: 0;
+            padding: 0;
+            border: 0 none;
+        }
+    </style>
+    <script type="text/javascript">
+        Ext.onReady(function() {
+            var currentName;
+            var replace = function(config, name) {
+                var btns = Ext.getCmp('btns');
+                
+                if (name && name != currentName) {
+                    currentName = name;
+                    
+                    btns.remove(0);
+                
+                    btns.add(config);
+                };
+                
+                // console.profile();
+                
+                btns.doLayout();
+                // console.profileEnd();
+            }
+            var viewport = new Ext.Viewport({
+			    layout:'border',
+                items: [
+					new Ext.BoxComponent({
+						region: 'north',
+						html: '<p style="padding:10px;color:#556677;font-size:11px;">north region</p>',
+						height: 36, // give north and south regions a height
+						margins: '0 0 18 0'
+					}),{
+						id:'east-region',
+						region:'east',
+						baseCls:'x-plain',
+						split:true,
+						width:150,
+						minWidth: 100,
+						maxWidth: 250,
+						//layout:'fit',
+						margins: '5 0 5 5',
+						items: {
+							baseCls: 'x-plain',
+							html: '<p style="padding:10px;color:#556677;font-size:11px;">east region</p>'
+							}
+					},{
+						margins: '5 5 5 0',
+						region: 'center', // a center region is ALWAYS required for border layout
+						//layout: 'border',
+						items: 
+						  new Ext.TabPanel({
+						  deferredRender: false,
+						  activeTab: 0,     // first tab initially active
+						  items: [{
+							  contentEl: 'home',
+							  id: 'tab_home',
+							  title: 'Home',
+							  closable: false,
+							  autoScroll: true
+								/*listeners: {
+								  scope: this,
+								  activate: function (tab) {
+									  Ext.getCmp('eastPanel').collapse();}
+								}*/
+							  }, {
+								id: 'tab_introducing',
+								title: 'Introducing ORBIS',
+								closable: false,
+								autoScroll: true,
+/*								autoLoad: {url: 'assets/introducing.html', callback: this.initSearch, scope: this},
+								listeners: {
+								  scope: this,
+								  activate: closeMap} */
+							  }, {
+								id: 'tab_understanding',
+								title: 'Understanding ORBIS',
+								closable: false,
+								items: [
+								  new Ext.TabPanel({
+									region: 'center',
+									border: true, // already wrapped so don't add another border
+									activeTab: 0, // second tab initially active
+									tabPosition: 'top',
+									items: [ 
+										{
+											id: 'text_understanding',
+											title: 'Introduction',
+											autoScroll: true,
+											//autoLoad: {url: 'assets/understanding.html', callback: this.initSearch, scope: this},
+										},{
+											id: 'tab_graph01',
+											title: 'A Graph Visualiation',
+											//contentEl: 'graphViz01',
+											autoScroll: true
+										}]
+									}) // end TabPanel
+									], // items tab_understanding
+								/*listeners: {
+								  scope: this,
+								  activate: closeMap}*/
+							  }, {
+								id: 'tab_building',
+								title: 'Building ORBIS',
+								closable: false,
+								autoScroll: true,
+								/*autoLoad: {url: 'assets/building.html', callback: this.initSearch, scope: this},
+								listeners: {
+								  scope: this,
+								  activate: closeMap
+								}*/
+							  }, {
+								id: 'tab_using',
+								title: 'Using ORBIS',
+								closable: false,
+								autoScroll: true,
+								/*autoLoad: {url: 'assets/using.html', callback: this.initSearch, scope: this},
+								listeners: {
+								  scope: this,
+								  activate: closeMap}*/
+							  },
+							  /*mapPanel,
+								 {
+								id: 'tab_credits',
+								title: 'Credits',
+								closable: false,
+								autoScroll: true,
+								autoLoad: {url: 'assets/credits.html', callback: this.initSearch, scope: this},
+								listeners: {
+								  scope: this,
+								  activate: closeMap
+								} // end listeners
+							  } // end tab_credits*/
+						  ] //end tabPanel items
+						}),// end tabPanel
+						  margins: '5 5 5 0',
+						  html: '<p style="padding:10px;color:#556677;font-size:11px;">south region</p>',
+						  height: 36, // give north and south regions a height
+					}
+				] // end vieport items
+         	}); // end viewport
+        }); // end onReady
+    </script>
+</head>
+<body>
+</body>
+</html>

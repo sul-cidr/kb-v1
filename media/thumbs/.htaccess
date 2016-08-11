@@ -1,0 +1,4 @@
+<FilesMatch "\.(php|pl|sh)$">
+Authtype StanfordAuth
+require valid-user
+</FilesMatch>

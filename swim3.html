@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<title>Chronological Diagram of Asia</title>
+    <script type="text/javascript" src="../../lib/d3/d3.v2.min.js"></script>
+		<style type="text/css">
+		.chart {
+			shape-rendering: crispEdges;
+		}
+
+		.mini text {
+			font: 9px sans-serif;	
+		}
+
+		.main text {
+			font: 12px sans-serif;	
+		}
+
+		.red {
+			fill: darksalmon;
+			stroke-width: 6;	
+		}
+
+		.green {
+			fill: darkolivegreen;
+			fill-opacity: .7;
+			stroke-width: 6;	
+		}
+
+		.darkblue {
+			fill: slategray;
+			fill-opacity: .7;
+			stroke-width: 6;	
+		}
+
+		.brush .extent {
+			stroke: gray;
+			fill: dodgerblue;
+			fill-opacity: .365;
+		}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+		//data
+		items = [{"lane": 0, "id": "Spencer Compton 1st Earl of Wilmington KG KB PC", "start": 1673, "end": 1743, "relation": "gray"},{"lane": 1, "id": "Robert Walpole 1st Earl of Orford KG KB PC", "start": 1676, "end": 1745, "relation": "gray"},{"lane": 2, "id": "Thomas Pelham-Holles 1st Duke of Newcastle-upon-Tyne and 1st Duke of Newcastle-under-Lyne KG PC", "start": 1693, "end": 1768, "relation": "gray"},{"lane": 3, "id": "Hon. Henry Pelham", "start": 1694, "end": 1754, "relation": "gray"},{"lane": 4, "id": "William Pitt 1st Earl of Chatham PC", "start": 1708, "end": 1778, "relation": "gray"},{"lane": 5, "id": "Hon. George Grenville", "start": 1712, "end": 1770, "relation": "gray"},{"lane": 6, "id": "John Stuart 3rd Earl of Bute KG PC", "start": 1713, "end": 1792, "relation": "gray"},{"lane": 7, "id": "James Waldegrave 2nd Earl Waldegrave FRS KG PC", "start": 1715, "end": 1763, "relation": "gray"},{"lane": 8, "id": "William Cavendish 4th Duke of Devonshire KG PC", "start": 1720, "end": 1764, "relation": "gray"},{"lane": 9, "id": "Charles Watson-Wentworth 2nd Marquess of Rockingham KG PC", "start": 1730, "end": 1782, "relation": "gray"},{"lane": 10, "id": "Frederick North 2nd Earl of Guilford KG PC", "start": 1732, "end": 1792, "relation": "gray"},{"lane": 11, "id": "Augustus Henry FitzRoy 3rd Duke of Grafton KG PC", "start": 1735, "end": 1811, "relation": "gray"},{"lane": 12, "id": "Gen. William Petty [formerly Fitzmaurice] 2nd Earl of Shelburne 1st Marquess of Lansdowne KG PC", "start": 1737, "end": 1805, "relation": "gray"},{"lane": 13, "id": "William Henry Cavendish Cavendish-Bentinck 3rd Duke of Portland", "start": 1738, "end": 1809, "relation": "gray"},{"lane": 14, "id": "Henry Addington 1st Viscount Sidmouth PC", "start": 1757, "end": 1844, "relation": "gray"},{"lane": 16, "id": "William Wyndham Grenville 1st Baron Grenville PC", "start": 1759, "end": 1834, "relation": "gray"},{"lane": 15, "id": "Hon. William Pitt", "start": 1759, "end": 1806, "relation": "gray"},{"lane": 17, "id": "Hon. Spencer Perceval KC PC", "start": 1762, "end": 1812, "relation": "gray"},{"lane": 18, "id": "Charles Grey 2nd Earl Grey KG PC", "start": 1764, "end": 1845, "relation": "gray"},{"lane": 19, "id": "Field Marshal Arthur Wellesley 1st Duke of Wellington KG KP GCB GCH PC FRS", "start": 1769, "end": 1852, "relation": "gray"},{"lane": 20, "id": "Robert Banks Jenkinson 2nd Earl of Liverpool PC", "start": 1770, "end": 1828, "relation": "gray"},{"lane": 21, "id": "George Canning PC", "start": 1770, "end": 1827, "relation": "gray"},{"lane": 22, "id": "William Lamb 2nd Viscount Melbourne PC FRS", "start": 1779, "end": 1848, "relation": "gray"},{"lane": 23, "id": "Frederick John Robinson 1st Viscount Goderich and 1st Earl of Ripon PC", "start": 1782, "end": 1859, "relation": "gray"},{"lane": 24, "id": "Henry John Temple 3rd Viscount Palmerston KG GCB PC", "start": 1784, "end": 1865, "relation": "gray"},{"lane": 25, "id": "George Hamilton-Gordon 4th Earl of Aberdeen KG KT FRS PC", "start": 1784, "end": 1860, "relation": "gray"},{"lane": 26, "id": "Sir Robert Peel 2nd Bt.", "start": 1788, "end": 1850, "relation": "gray"},{"lane": 27, "id": "John Russell 1st Earl Russell KG GCMG PC", "start": 1792, "end": 1878, "relation": "gray"},{"lane": 28, "id": "Edward George Geoffrey Smith Stanley 14th Earl of Derby KG PC", "start": 1799, "end": 1869, "relation": "gray"},{"lane": 29, "id": "Benjamin Disraeli 1st Earl of Beaconsfield KG PC FRS", "start": 1804, "end": 1881, "relation": "gray"},{"lane": 30, "id": "William Ewart Gladstone PC", "start": 1809, "end": 1898, "relation": "gray"},{"lane": 31, "id": "Robert Arthur Talbot Gascoyne-Cecil 3rd Marquess of Salisbury KG PC GCVO", "start": 1830, "end": 1903, "relation": "gray"},{"lane": 32, "id": "Sir Henry Campbell-Bannerman GCB", "start": 1836, "end": 1908, "relation": "gray"},{"lane": 33, "id": "Archibald Primrose 5th Earl of Rosebery KG PC", "start": 1847, "end": 1929, "relation": "gray"},{"lane": 34, "id": "Arthur James Balfour 1st Earl of Balfour KG OM PC DL FRS", "start": 1848, "end": 1930, "relation": "gray"},{"lane": 35, "id": "Herbert Henry Asquith 1st Earl of Oxford and Asquith QC KG PC", "start": 1852, "end": 1928, "relation": "gray"},{"lane": 36, "id": "[Arthur] Neville Chamberlain", "start": 1869, "end": 1940, "relation": "gray"},{"lane": 37, "id": "Sir Winston Leonard Spencer-Churchill", "start": 1874, "end": 1965, "relation": "gray"},{"lane": 38, "id": "Capt. [Maurice] Harold Macmillan 1st Earl of Stockton OM PC", "start": 1894, "end": 1986, "relation": "gray"},{"lane": 39, "id": "Alexander Frederick Douglas-Home Baron Home of the Hirsel KT PC", "start": 1903, "end": 1995, "relation": "gray"},{"lane": 40, "id": "David William Donald Cameron MP PC", "start": 1966, "end": 2027, "relation": "gray"}],
+			timeBegin = d3.min(items, function(p) {return p["start"]}) - 10,
+			timeEnd = d3.max(items, function(p) {return p["end"]}) + 10;
+
+		var newLaneDates = [0];
+		var newLanes = [""];
+
+		lanes = [];
+		for (x in items) {
+//			lanes.push("");
+			lanes.push("Lane"+x);
+			items[x]["lane"] = parseInt(x);
+		}
+		laneLength = lanes.length;
+		
+		priestlyPacked = true;
+		
+		if ( priestlyPacked == true) {
+		for (x in items) {
+			var laned = false;
+			var xx = 0;
+					while (laned == false) {
+						if (items[x]["start"] > newLaneDates[xx]) {
+							newLaneDates[xx] = items[x]["end"] + 5
+							items[x]["lane"] = xx;
+							laned = true;
+							break;
+						}
+						xx++;
+						if (xx > newLaneDates.length) {
+							newLaneDates.push(items[x]["end"] + 5);
+							items[x]["lane"] = newLanes.length;
+//							newLanes.push("");
+							newLanes.push("Lane"+newLanes.length);
+							laned = true;
+							break;
+						} 
+			}
+		}
+
+			lanes = newLanes;
+			laneLength = newLanes.length;
+		}
+
+		
+		</script>
+		<script type="text/javascript">
+		var m = [20, 15, 15, 120], //top right bottom left
+			w = 500 - m[1] - m[3],
+			h = 330 - m[0] - m[2],
+//			miniHeight = laneLength * 12 + 50,
+			miniHeight = 30,
+			mainHeight = h - miniHeight - 50;
+
+		//scales
+		var x = d3.scale.linear()
+				.domain([timeBegin, timeEnd])
+				.range([0, w]);
+		var x1 = d3.scale.linear()
+				.range([0, w]);
+		var y1 = d3.scale.linear()
+				.domain([0, laneLength])
+				.range([0, mainHeight]);
+		var y2 = d3.scale.linear()
+				.domain([0, laneLength])
+				.range([0, miniHeight]);
+
+		var chart = d3.select("body")
+					.append("svg")
+					.attr("width", w + m[1] + m[3])
+					.attr("height", h + m[0] + m[2])
+					.attr("class", "chart");
+		
+		chart.append("defs").append("clipPath")
+			.attr("id", "clip")
+			.append("rect")
+			.attr("width", w)
+			.attr("height", mainHeight);
+
+		var main = chart.append("g")
+					.attr("transform", "translate(" + m[3] + "," + m[0] + ")")
+					.attr("width", w)
+					.attr("height", mainHeight)
+					.attr("class", "main");
+
+		var mini = chart.append("g")
+					.attr("transform", "translate(" + m[3] + "," + (mainHeight + m[0]) + ")")
+					.attr("width", w)
+					.attr("height", miniHeight)
+					.attr("class", "mini");
+		
+		//main lanes and texts
+		main.append("g").selectAll(".laneLines")
+			.data(items)
+			.enter().append("line")
+			.attr("x1", m[1])
+			.attr("y1", function(d) {return y1(d.lane);})
+			.attr("x2", w)
+			.attr("y2", function(d) {return y1(d.lane);})
+			.attr("fill", function(d) {return y1(d.relation);})
+			.attr("stroke", "lightgray")
+			.style("opacity", .5)
+			
+
+		main.append("g").selectAll(".laneText")
+			.data(lanes)
+			.enter().append("text")
+			.text(function(d) {return d;})
+			.attr("x", -m[1])
+			.attr("y", function(d, i) {return y1(i + .5);})
+			.attr("dy", ".5ex")
+			.attr("text-anchor", "end")
+			.attr("class", "laneText")
+			.style("opacity",.6);
+		
+		//mini lanes and texts
+		mini.append("g").selectAll(".laneLines")
+			.data(items[0])
+			.enter().append("line")
+			.attr("x1", m[1])
+			.attr("y1", function(d) {return y2(d.lane);})
+			.attr("x2", w)
+			.attr("y2", function(d) {return y2(d.lane);})
+			.attr("stroke", "lightgray");
+
+		mini.append("g").selectAll(".laneText")
+			.data(lanes[0])
+			.enter().append("text")
+			.text(function(d) {return d;})
+			.attr("x", -m[1])
+			.attr("y", function(d, i) {return y2(i + .5);})
+			.attr("dy", ".5ex")
+			.attr("text-anchor", "end")
+			.attr("class", "laneText");
+
+		var itemRects = main.append("g")
+							.attr("clip-path", "url(#clip)");
+		
+		//mini item rects
+		mini.append("g").selectAll("miniItems")
+			.data(items[0])
+			.enter().append("rect")
+			.attr("class", function(d) {return "" + d.relation;})
+			.attr("x", function(d) {return x(d.start);})
+			.attr("y", function(d) {return y2(d.lane + .5) - 5;})
+			.attr("width", function(d) {return x(d.end - d.start);})
+			.attr("height", 10)
+			;
+
+		//mini labels
+		mini.append("g").selectAll(".miniLabels")
+			.data(items[0])
+			.enter().append("text")
+			.text(function(d) {return d.id;})
+			.attr("x", function(d) {return x(d.start);})
+			.attr("y", function(d) {return y2(d.lane + .5);})
+			.attr("dy", ".5ex");
+
+		//brush
+		var brush = d3.svg.brush()
+							.x(x)
+							.on("brush", display);
+
+		mini.append("g")
+			.attr("class", "x brush")
+			.call(brush)
+			.selectAll("rect")
+			.attr("y", 1)
+			.attr("height", miniHeight - 1);
+
+		display();
+		
+		function display() {
+			var rects, labels,
+				minExtent = brush.extent()[0],
+				maxExtent = brush.extent()[1],
+				visItems = items.filter(function(d) {return d.start < maxExtent && d.end > minExtent;});
+
+			mini.select(".brush")
+				.call(brush.extent([minExtent, maxExtent]));
+
+			x1.domain([minExtent, maxExtent]);
+
+			//update main item rects
+			rects = itemRects.selectAll("rect")
+			        .data(visItems, function(d) { return d.id; })
+				.attr("x", function(d) {return x1(d.start);})
+				.attr("width", function(d) {return x1(d.end) - x1(d.start);});
+			
+			rects.enter().append("rect")
+				.attr("class", function(d) {return "miniItem" + d.lane;})
+				.attr("x", function(d) {return x1(d.start);})
+				.attr("y", function(d) {return y1(d.lane) + 0;})
+				.attr("width", function(d) {return x1(d.end) - x1(d.start);})
+				.attr("height", function(d) {return .8 * y1(1);})
+				.attr("fill", function(d) {return d.relation})
+				.style("fill", function(d) {return d.relation})
+				.style("opacity", .5);
+
+			rects.exit().remove();
+
+			//update the item labels
+			labels = itemRects.selectAll("text")
+				.data(visItems, function (d) { return d.id; })
+				.attr("x", function(d) {return x1(Math.max(d.start, minExtent) + 2);});
+
+			labels.enter().append("text")
+				.text(function(d) {return d.id;})
+				.attr("x", function(d) {return x1(Math.max(d.start, minExtent));})
+				.attr("y", function(d) {return y1(d.lane + .5);})
+				.attr("text-anchor", "start")
+				.style("opacity",.01);
+
+			labels.exit().remove();
+
+		}
+		
+		</script>
+	</body>
+</html>

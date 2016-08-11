@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <!--
+    Zoom/pan map example: integrates d3.geo and d3.behavior
+    Iain Dillingham, http://dillingham.me.uk/
+    With help from Jason Davies, http://www.jasondavies.com/
+  -->
+  <title>Zoom/pan map example</title>
+<script src="../../lib/d3v3/d3.v3.min.js"></script>
+<script src="../../lib/d3v3/d3.geo.projection.v0.min.js"></script>
+<script src="../../lib/d3v3/topojson.js"></script>
+  <style type="text/css">
+
+
+.background {
+  fill: #a4bac7;
+}
+
+.foreground {
+  fill: none;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+.graticule {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+.graticule :nth-child(2n) {
+  stroke-dasharray: 2,2;
+}
+
+.land {
+  fill: #d7c7ad;
+  stroke: #766951;
+}
+
+.boundary {
+  fill: none;
+  stroke: #a5967e;
+}
+
+
+    #axes {
+      stroke: #BDBDBD;
+      stroke-width: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    var w = 960;
+    var h = 500;
+    
+    var projection = d3.geo.vanDerGrinten4()
+    .scale(125)
+    .precision(.1);
+        
+    var path = d3.geo.path().projection(projection);
+    
+    var graticule = d3.geo.graticule();
+
+    var t = projection.translate(); // the projection's default translation
+    var s = projection.scale() // the projection's default scale
+
+    var map = d3.select("#vis").append("svg:svg")
+        .attr("width", w)
+        .attr("height", h)
+        .call(d3.behavior.zoom().on("zoom", redraw));
+
+    var carto = map.append("svg:g").attr("id", "world");
+    
+    carto.append("defs").append("path")
+      .datum({type: "Sphere"})
+      .attr("id", "sphere")
+      .attr("d", path);
+      
+    carto.append("use")
+    .attr("class", "background")
+    .attr("xlink:href", "#sphere");
+    
+    carto.append("g")
+    .attr("class", "graticule")
+  .selectAll("path")
+    .data(graticule.lines)
+  .enter().append("path")
+    .attr("d", path);
+    
+    carto.append("use")
+    .attr("class", "foreground")
+    .attr("xlink:href", "#sphere");
+
+    var axes = carto.append("svg:g").attr("id", "axes");
+
+    var xAxis = axes.append("svg:line")
+        .attr("x1", t[0])
+        .attr("y1", 0)
+        .attr("x2", t[0])
+        .attr("y2", h);
+
+    var yAxis = axes.append("svg:line")
+        .attr("x1", 0)
+        .attr("y1", t[1])
+        .attr("x2", w)
+        .attr("y2", t[1]);
+
+
+
+d3.json("world-110m.json", function(error, world) {
+  carto.insert("path", ".graticule")
+      .datum(topojson.object(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+  carto.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+});
+    function redraw() {
+      // d3.event.translate (an array) stores the current translation from the parent SVG element
+      // t (an array) stores the projection's default translation
+      // we add the x and y vales in each array to determine the projection's new translation
+      var tx = t[0] * d3.event.scale + d3.event.translate[0];
+      var ty = t[1] * d3.event.scale + d3.event.translate[1];
+      projection.translate([tx, ty]);
+
+      // now we determine the projection's new scale, but there's a problem:
+      // the map doesn't 'zoom onto the mouse point'
+      projection.scale(s * d3.event.scale);
+
+      // redraw the map
+      carto.selectAll("path").attr("d", path);
+
+      // redraw the x axis
+      xAxis.attr("x1", tx).attr("x2", tx);
+
+      // redraw the y axis
+      yAxis.attr("y1", ty).attr("y2", ty);
+    }
+  </script>
+</body>
+</html>
