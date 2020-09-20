@@ -2,7 +2,8 @@
 $count = 0;
 // display errors or not...
 
-$link = pg_connect("host=orbis-prod.stanford.edu dbname=kindred user=elijah password=pog55ger");
+include("conn.php");
+$link = pg_connect($connection_string);
 
 $sql = "
 with P as (

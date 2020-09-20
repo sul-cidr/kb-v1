@@ -2,7 +2,8 @@
 $count = 0;
 // display errors or not...
 
-$link = pg_connect("host=orbis-prod.stanford.edu dbname=kindred user=webapp password=sl1ppy");
+include("conn.php");
+$link = pg_connect($connection_string);
 
 $indiv_array = array(2491,
 2481,

@@ -14,7 +14,8 @@ $coastal = $_GET['c'];
 $modelist = $_GET['ml'];
 */
 
-$link = pg_connect("host=orbis-prod.stanford.edu dbname=kindred user=webapp password=sl1ppy");
+include("conn.php");
+$link = pg_connect($connection_string);
 
 if ($before + $after > 0){
 

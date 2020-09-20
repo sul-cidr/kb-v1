@@ -4,7 +4,8 @@ $year = $_GET['y'] + 50;
 $yearBefore = $_GET['y'] - 50;
 $count = 0;
 
-$link = pg_connect("host=orbis-prod.stanford.edu dbname=kindred user=webapp password=sl1ppy");
+include("conn.php");
+$link = pg_connect($connection_string);
 
 $sql = "
 with listed AS
